@@ -4,6 +4,7 @@
 
 import argparse
 
+
 def args_parser():
     parser = argparse.ArgumentParser()
     # federated arguments
@@ -26,6 +27,8 @@ def args_parser():
     parser.add_argument('--num_filters', type=int, default=32, help="number of filters for conv nets")
     parser.add_argument('--max_pool', type=str, default='True',
                         help="Whether use max pooling rather than strided convolutions")
+    parser.add_argument("--delta", type=float, default=1e-5, metavar="D", help="Target delta (default: 1e-5)")
+    parser.add_argument("--sigma", type=float, default=1.0, metavar="S", help="Noise multiplier (default 1.0)")
 
     # other arguments
     parser.add_argument('--dataset', type=str, default='mnist', help="name of dataset")
@@ -37,5 +40,7 @@ def args_parser():
     parser.add_argument('--verbose', action='store_true', help='verbose print')
     parser.add_argument('--seed', type=int, default=1, help='random seed (default: 1)')
     parser.add_argument('--all_clients', action='store_true', help='aggregation over all clients')
+    parser.add_argument("--secure-rng", action="store_true", default=False,
+                        help="Enable Secure RNG to have trustworthy privacy guarantees. Comes at a performance cost")
     args = parser.parse_args()
     return args
