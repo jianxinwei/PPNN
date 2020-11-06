@@ -17,7 +17,7 @@ bank = pd.read_csv(bank_full_path, sep=';',
 # age, balance, duration, campaign, pdays, previous: [0,1]
 # others: one-hot encoding
 bank.drop(['contact', 'day', 'month'], axis=1, inplace=True)
-bank = bank.sample(frac=1)
+# bank = bank.sample(frac=1)
 
 numeric_col = ['age', 'balance', 'duration', 'campaign', 'pdays', 'previous']
 # all_col = bank.columns.values.tolist()
