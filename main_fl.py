@@ -23,8 +23,8 @@ if __name__ == '__main__':
     
     args.all_clients = True
     # load dataset and split users
-    trainset = pd.read_csv('./data/bank/new_bank_full.csv', sep=';')
-    testset = pd.read_csv('./data/bank/new_bank.csv', sep=';')
+    trainset = pd.read_csv('./data/{}/new_{}_full.csv'.format(args.dataset, args.dataset), sep=';')
+    testset = pd.read_csv('./data/{}/new_{}.csv'.format(args.dataset, args.dataset), sep=';')
     train_attributes, train_labels = dfToTensor(trainset)
     attrisize = list(train_attributes[0].size())[0]
     classes = 2
@@ -76,18 +76,18 @@ if __name__ == '__main__':
             print('Round{:3d}, Average loss {:.3f}'.format(iter, loss_avg))
             loss_train.append(loss_avg)
 
-    torch.save(net_glob, './save/fl_bank.pkl')
+    torch.save(net_glob, './save/fl_{}.pkl'.format(args.dataset))
 
     # plot loss curve
     plt.figure()
     plt.plot(range(len(loss_train)), loss_train)
     plt.ylabel('train_loss')
     plt.xlabel('epoch')
-    plt.savefig('./save/bank_fl_{}_{}.png'.format(args.model, args.epochs))
+    plt.savefig('./save/{}_fl_{}_{}.png'.format(args.dataset, rgs.model, args.epochs))
 
     # testing
     train_loader = DataLoader(dataset=TensorDataset(train_attributes, train_labels), batch_size=args.bs, shuffle=True)
-    # net_glob = torch.load('./save/fl_bank.pkl')
+    # net_glob = torch.load('./save/fl_{}.pkl'.format(args.dataset))
     net_glob.eval()
     acc_train, loss_train = test_bank(net_glob, train_loader, args)
     acc_test, loss_test = test_bank(net_glob, test_loader, args)

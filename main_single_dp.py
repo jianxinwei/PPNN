@@ -22,8 +22,8 @@ if __name__ == '__main__':
     args.device = torch.device('cuda:{}'.format(torch.cuda.device_count()-1) if torch.cuda.is_available() and args.gpu != -1 else 'cpu')
 
     # load dataset and split users
-    trainset = pd.read_csv('./data/bank/new_bank_full.csv', sep=';')
-    testset = pd.read_csv('./data/bank/new_bank.csv', sep=';')
+    trainset = pd.read_csv('./data/{}/new_{}_full.csv'.format(args.dataset, args.dataset), sep=';')
+    testset = pd.read_csv('./data/{}/new_{}.csv'.format(args.dataset, args.dataset), sep=';')
     train_attributes, train_labels = dfToTensor(trainset)
     train_attributes = train_attributes.to(args.device)
     train_labels = train_labels.to(args.device, dtype=torch.long)
@@ -86,17 +86,17 @@ if __name__ == '__main__':
                     f"(ε = {epsilon:.2f}, δ = {self.args.delta})"
                 )
 
-    torch.save(net_glob, './save/single_dp_bank.pkl')
+    torch.save(net_glob, './save/single_dp_{}.pkl'.format(args.dataset))
 
     # plot loss curve
     plt.figure()
     plt.plot(range(len(loss_train)), loss_train)
     plt.ylabel('train_loss')
     plt.xlabel('epoch')
-    plt.savefig('./save/bank_single_dp_{}_{}.png'.format(args.model, args.epochs))
+    plt.savefig('./save/{}_single_dp_{}_{}.png'.format(args.dataset, args.model, args.epochs))
 
     # testing
-    # net_glob = torch.load('./save/single_dp_bank.pkl')
+    # net_glob = torch.load('./save/single_dp_{}.pkl'.format(args.dataset))
     net_glob.eval()
     if args.gpu != -1:
         test_loader = DataLoader(dataset=TensorDataset(test_attributes, test_labels), batch_size=args.bs, shuffle=True)

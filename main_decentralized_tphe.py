@@ -31,8 +31,8 @@ if __name__ == '__main__':
 
     args.all_clients = True
     # load dataset and split users
-    trainset = pd.read_csv('./data/bank/new_bank_full.csv', sep=';')
-    testset = pd.read_csv('./data/bank/new_bank.csv', sep=';')
+    trainset = pd.read_csv('./data/{}/new_{}_full.csv'.format(args.dataset, args.dataset), sep=';')
+    testset = pd.read_csv('./data/{}/new_{}.csv'.format(args.dataset, args.dataset), sep=';')
     train_attributes, train_labels = dfToTensor(trainset)
     attrisize = list(train_attributes[0].size())[0]
     classes = 2
@@ -86,18 +86,18 @@ if __name__ == '__main__':
 
     # net_glob.load_state_dict(net_avg_workers(broadcast_state_dict, args.num_users))
     net_glob = workers[0].tmp_net # Randomly copy the weight from a client. Here, we choose client 0.
-    torch.save(net_glob, './save/decentralized_tphe_bank.pkl')
+    torch.save(net_glob, './save/decentralized_tphe_{}.pkl'.format(args.dataset))
 
     # plot loss curve
     plt.figure()
     plt.plot(range(len(loss_train)), loss_train)
     plt.ylabel('train_loss')
     plt.xlabel('epoch')
-    plt.savefig('./save/bank_decentralized_tphe_{}_{}.png'.format(args.model, args.epochs))
+    plt.savefig('./save/{}_decentralized_tphe_{}_{}.png'.format(args.dataset, args.model, args.epochs))
 
     # testing
     train_loader = DataLoader(dataset=TensorDataset(train_attributes, train_labels), batch_size=args.bs, shuffle=True)
-    # net_glob = torch.load('./save/decentralized_tphe_bank.pkl')
+    # net_glob = torch.load('./save/decentralized_tphe_{}.pkl'.format(args.dataset))
     net_glob.eval()
     acc_train, loss_train = test_bank(net_glob, train_loader, args)
     acc_test, loss_test = test_bank(net_glob, test_loader, args)
