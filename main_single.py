@@ -165,6 +165,21 @@ if __name__ == '__main__':
     plt.plot(range(len(loss_train_eval)), loss_train_eval, label='train_loss_eval')
     plt.plot(range(len(loss_valid)), loss_valid, label='valid_loss')
     plt.plot(range(len(loss_test)), loss_test, label='test_loss')
+    # plt.plot(range(len(acc_train_eval)), acc_train_eval, label='train_acc_eval')
+    # plt.plot(range(len(acc_valid)), acc_valid, label='valid_acc')
+    # plt.plot(range(len(acc_test)), acc_test, label='test_acc')
+    # plt.ylabel('loss')
+    plt.xlabel('epoch')
+    plt.grid(True)
+    plt.legend(loc=0)
+    plt.savefig('./save/{}_single_{}_{}_loss.png'.format(args.dataset, args.model, args.epochs))
+
+    # plot loss curve
+    plt.figure()
+    # plt.plot(range(len(loss_train)), loss_train, label='train_loss')
+    # plt.plot(range(len(loss_train_eval)), loss_train_eval, label='train_loss_eval')
+    # plt.plot(range(len(loss_valid)), loss_valid, label='valid_loss')
+    # plt.plot(range(len(loss_test)), loss_test, label='test_loss')
     plt.plot(range(len(acc_train_eval)), acc_train_eval, label='train_acc_eval')
     plt.plot(range(len(acc_valid)), acc_valid, label='valid_acc')
     plt.plot(range(len(acc_test)), acc_test, label='test_acc')
@@ -172,7 +187,7 @@ if __name__ == '__main__':
     plt.xlabel('epoch')
     plt.grid(True)
     plt.legend(loc=0)
-    plt.savefig('./save/{}_single_{}_{}.png'.format(args.dataset, args.model, args.epochs))
+    plt.savefig('./save/{}_single_{}_{}_acc.png'.format(args.dataset, args.model, args.epochs))
 
     # testing
     net_glob = torch.load('./save/single_best_{}.pkl'.format(args.dataset))
