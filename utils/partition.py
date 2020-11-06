@@ -1,6 +1,6 @@
 import numpy as np
 
-def dataset_iid(dataset, num_clients = 4):
+def dataset_iid(dataset, num_clients=4):
     """
     Sample I.I.D. client data from dataset
     :param dataset:
