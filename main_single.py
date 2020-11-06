@@ -27,9 +27,6 @@ if __name__ == '__main__':
     wholedataset = pd.read_csv('./data/{}/new_{}_whole.csv'.format(args.dataset, args.dataset), sep=';')
     trainset, validset, testset = np.split(wholedataset, [int(args.train_ratio*len(wholedataset)), int((args.train_ratio + args.valid_ratio)*len(wholedataset))])
 
-    validset, testset, trainset = np.split(wholedataset, [int(.2*len(wholedataset)), int((.4)*len(wholedataset))])
-    # ipdb.set_trace()
-
     train_attributes, train_labels = dfToTensor(trainset)
     train_attributes = train_attributes.to(args.device)
     train_labels = train_labels.to(args.device, dtype=torch.long)
