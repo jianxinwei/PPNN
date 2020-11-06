@@ -16,9 +16,7 @@ bank = pd.read_csv(bank_full_path, sep=';',
 # print(bank)
 # age, balance, duration, campaign, pdays, previous: [0,1]
 # others: one-hot encoding
-bank.drop(['contact'], axis=1, inplace=True)
-bank.drop(['day'], axis=1, inplace=True)
-bank.drop(['month'], axis=1, inplace=True)
+bank.drop(['contact', 'day', 'month'], axis=1, inplace=True)
 
 numeric_col = ['age', 'balance', 'duration', 'campaign', 'pdays', 'previous']
 all_col = bank.columns.values.tolist()
@@ -31,7 +29,6 @@ for c in all_col:
         if max_value == min_value:
             continue
         new_col = bank[c].map(lambda x: (x - min_value) / (max_value - min_value))
-        print(new_col.head())
         new_bank = pd.concat([new_bank, new_col], axis=1)
     elif c == 'y':
         new_col = bank[c].map(lambda x: 0 if x == 'no' else 1)
