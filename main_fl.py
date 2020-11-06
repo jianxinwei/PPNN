@@ -83,7 +83,7 @@ if __name__ == '__main__':
     plt.plot(range(len(loss_train)), loss_train)
     plt.ylabel('train_loss')
     plt.xlabel('epoch')
-    plt.savefig('./save/{}_fl_{}_{}.png'.format(args.dataset, rgs.model, args.epochs))
+    plt.savefig('./save/{}_fl_{}_{}.png'.format(args.dataset, args.model, args.epochs))
 
     # testing
     train_loader = DataLoader(dataset=TensorDataset(train_attributes, train_labels), batch_size=args.bs, shuffle=True)
