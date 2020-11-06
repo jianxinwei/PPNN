@@ -12,10 +12,11 @@ bidding_path = "../data/bidding/Shill Bidding Dataset.csv"
 
 bidding_data = pd.read_csv(bidding_path, sep=',')
 bidding_data.drop(['Record_ID', 'Auction_ID', 'Bidder_ID'], axis=1, inplace=True)
-print(bidding_data.head())
+# print(bidding_data.head())
 
 onehot_col = ['Successive_Outbidding']
-all_col = bidding_data.columns.values.tolist()
+# all_col = bidding_data.columns.values.tolist()
+all_col = bidding_data.drop_duplicates().columns.values.tolist()
 
 new_bidding = pd.DataFrame(columns=[])
 for c in all_col:
@@ -34,4 +35,4 @@ for c in all_col:
 
 print(new_bidding.head())
 # print(new_bidding.columns.values.tolist())
-new_bidding.to_csv(os.path.join(os.path.split(bidding_path)[0], 'new_bidding.csv'), sep=';', index=False)
+new_bidding.to_csv(os.path.join(os.path.split(bidding_path)[0], 'new_bidding_whole.csv'), sep=';', index=False)

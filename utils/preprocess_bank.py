@@ -19,7 +19,8 @@ bank = pd.read_csv(bank_full_path, sep=';',
 bank.drop(['contact', 'day', 'month'], axis=1, inplace=True)
 
 numeric_col = ['age', 'balance', 'duration', 'campaign', 'pdays', 'previous']
-all_col = bank.columns.values.tolist()
+# all_col = bank.columns.values.tolist()
+all_col = bank.drop_duplicates().columns.values.tolist()
 
 new_bank = pd.DataFrame(columns=[])
 for c in all_col:
@@ -39,4 +40,4 @@ for c in all_col:
 # print(new_bank.head())
 # print(new_bank.columns.values.tolist())
 
-new_bank.to_csv(os.path.join(os.path.split(bank_path)[0], 'new_bank_full.csv'), sep=';', index=False)
+new_bank.to_csv(os.path.join(os.path.split(bank_path)[0], 'new_bank_whole.csv'), sep=';', index=False)

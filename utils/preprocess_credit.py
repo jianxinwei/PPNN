@@ -16,7 +16,8 @@ credit_data.drop(['ID'], axis=1, inplace=True)
 
 numeric_col = ['LIMIT_BAL', 'AGE', 'BILL_AMT1', 'BILL_AMT2', 'BILL_AMT3', 'BILL_AMT4', 'BILL_AMT5', 'BILL_AMT6',
                'PAY_AMT1', 'PAY_AMT2', 'PAY_AMT3', 'PAY_AMT4', 'PAY_AMT5', 'PAY_AMT6']
-all_col = credit_data.columns.values.tolist()
+# all_col = credit_data.columns.values.tolist()
+all_col = credit_data.drop_duplicates().columns.values.tolist()
 
 new_credit = pd.DataFrame(columns=[])
 for c in all_col:
@@ -35,4 +36,4 @@ for c in all_col:
 
 print(new_credit.head())
 # print(new_credit.columns.values.tolist())
-new_credit.to_csv(os.path.join(os.path.split(credit_path)[0], 'new_credit.csv'), sep=';', index=False)
+new_credit.to_csv(os.path.join(os.path.split(credit_path)[0], 'new_credit_whole.csv'), sep=';', index=False)

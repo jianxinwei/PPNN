@@ -22,13 +22,21 @@ if __name__ == '__main__':
     args.device = torch.device('cuda:{}'.format(torch.cuda.device_count()-1) if torch.cuda.is_available() and args.gpu != -1 else 'cpu')
 
     # load dataset and split users
-    trainset = pd.read_csv('./data/{}/new_{}_full.csv'.format(args.dataset, args.dataset), sep=';')
-    testset = pd.read_csv('./data/{}/new_{}.csv'.format(args.dataset, args.dataset), sep=';')
+    # trainset = pd.read_csv('./data/{}/new_{}_full.csv'.format(args.dataset, args.dataset), sep=';')
+    # testset = pd.read_csv('./data/{}/new_{}.csv'.format(args.dataset, args.dataset), sep=';')
+    wholedataset = pd.read_csv('./data/{}/new_{}_whole.csv'.format(args.dataset, args.dataset), sep=';')
+    trainset, validset, testset = np.split(wholedataset, [int(args.train_ratio*len(wholedataset)), int((args.train_ratio + args.valid_ratio)*len(wholedataset))])
+
     train_attributes, train_labels = dfToTensor(trainset)
     train_attributes = train_attributes.to(args.device)
     train_labels = train_labels.to(args.device, dtype=torch.long)
     attrisize = list(train_attributes[0].size())[0]
-    classes = 2
+    classes = args.num_classes
+
+    valid_attributes, valid_labels = dfToTensor(validset)
+    valid_attributes = valid_attributes.to(args.device)
+    valid_labels = valid_labels.to(args.device, dtype=torch.long)
+    valid_loader = DataLoader(dataset=TensorDataset(valid_attributes, valid_labels), batch_size=args.bs, shuffle=True)
 
     # print(attrisize, classes)
     test_attributes, test_labels = dfToTensor(testset)
@@ -62,7 +70,8 @@ if __name__ == '__main__':
                                    noise_multiplier=0.3, max_grad_norm=1.2, secure_rng=args.secure_rng)
     privacy_engine.attach(optimizer)
 
-
+    loss_valid = []
+    best_valid_loss = np.finfo(float).max
     with timer() as t:
         for iter in range(args.epochs):
             batch_loss = []
@@ -78,6 +87,7 @@ if __name__ == '__main__':
             print('Round{:3d}, Average loss {:.3f}'.format(iter, loss_avg))
             loss_train.append(loss_avg)
 
+            '''
             if batch_idx % args.pb_interval == 0:
                 epsilon, best_alpha = optimizer.privacy_engine.get_privacy_spent(args.delta)
                 print(
@@ -85,22 +95,37 @@ if __name__ == '__main__':
                     f"Loss: {loss_avg:.6f} "
                     f"(ε = {epsilon:.2f}, δ = {self.args.delta})"
                 )
+            '''
+            net_glob.eval()
+            acc_valid, tmp_loss_valid = test_bank(net_glob, valid_loader, args)
+            print('Round{:3d}, Validation loss {:.3f}'.format(iter, tmp_loss_valid))
+            loss_valid.append(tmp_loss_valid)
+            if tmp_loss_valid < best_valid_loss:
+                best_valid_loss = tmp_loss_valid
+                torch.save(net_glob, './save/single_dp_best_{}.pkl'.format(args.dataset))
+                print('SAVE BEST MODEL AT EPOCH {}'.format(iter))
+            net_glob.train()
 
-    torch.save(net_glob, './save/single_dp_{}.pkl'.format(args.dataset))
+    torch.save(net_glob, './save/single_dp_final_{}.pkl'.format(args.dataset))
 
     # plot loss curve
     plt.figure()
-    plt.plot(range(len(loss_train)), loss_train)
-    plt.ylabel('train_loss')
+    plt.plot(range(len(loss_train)), loss_train, 'ro-', label='train_loss')
+    plt.plot(range(len(loss_valid)), loss_valid, 'b^-', label='valid_loss')
+    plt.ylabel('loss')
     plt.xlabel('epoch')
+    plt.grid(True)
+    plt.legend(loc=0)
     plt.savefig('./save/{}_single_dp_{}_{}.png'.format(args.dataset, args.model, args.epochs))
 
     # testing
-    # net_glob = torch.load('./save/single_dp_{}.pkl'.format(args.dataset))
+    net_glob = torch.load('./save/single_dp_best_{}.pkl'.format(args.dataset))
     net_glob.eval()
     if args.gpu != -1:
         test_loader = DataLoader(dataset=TensorDataset(test_attributes, test_labels), batch_size=args.bs, shuffle=True)
     acc_train, loss_train = test_bank(net_glob, train_loader, args)
+    acc_valid, loss_valid = test_bank(net_glob, valid_loader, args)
     acc_test, loss_test = test_bank(net_glob, test_loader, args)
-    print("Training accuracy: {:.2f}".format(acc_train))
-    print("Testing accuracy: {:.2f}".format(acc_test))
+    print("Training accuracy: {:.2f}".format(acc_train), "Training loss: {:.2f}".format(loss_train))
+    print("Validating accuracy: {:.2f}".format(acc_valid), "Validating loss: {:.2f}".format(loss_valid))
+    print("Testing accuracy: {:.2f}".format(acc_test), "Testing loss: {:.2f}".format(loss_test))

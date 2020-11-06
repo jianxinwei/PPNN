@@ -24,12 +24,24 @@ if __name__ == '__main__':
     args.device = torch.device('cuda:{}'.format(torch.cuda.device_count()-1) if torch.cuda.is_available() and args.gpu != -1 else 'cpu')
     
     args.all_clients = True
+
     # load dataset and split users
-    trainset = pd.read_csv('./data/{}/new_{}_full.csv'.format(args.dataset, args.dataset), sep=';')
-    testset = pd.read_csv('./data/{}/new_{}.csv'.format(args.dataset, args.dataset), sep=';')
+    # trainset = pd.read_csv('./data/{}/new_{}_full.csv'.format(args.dataset, args.dataset), sep=';')
+    # testset = pd.read_csv('./data/{}/new_{}.csv'.format(args.dataset, args.dataset), sep=';')
+    wholedataset = pd.read_csv('./data/{}/new_{}_whole.csv'.format(args.dataset, args.dataset), sep=';')
+    trainset, validset, testset = np.split(wholedataset, [int(args.train_ratio*len(wholedataset)), int((args.train_ratio + args.valid_ratio)*len(wholedataset))])
+
     train_attributes, train_labels = dfToTensor(trainset)
+    train_attributes = train_attributes.to(args.device)
+    train_labels = train_labels.to(args.device, dtype=torch.long)
     attrisize = list(train_attributes[0].size())[0]
-    classes = 2
+    classes = args.num_classes
+
+    valid_attributes, valid_labels = dfToTensor(validset)
+    valid_attributes = valid_attributes.to(args.device)
+    valid_labels = valid_labels.to(args.device, dtype=torch.long)
+    valid_loader = DataLoader(dataset=TensorDataset(valid_attributes, valid_labels), batch_size=args.bs, shuffle=True)
+    
     # print(attrisize, classes)
     test_attributes, test_labels = dfToTensor(testset)
     dict_clients = dataset_iid(trainset, args.num_users)
@@ -78,7 +90,7 @@ if __name__ == '__main__':
 
     # net_glob.load_state_dict(net_avg_workers(broadcast_state_dict, args.num_users))
     net_glob = workers[0].tmp_net # Randomly copy the weight from a client. Here, we choose client 0.
-    torch.save(net_glob, './save/decentralized_{}.pkl'.format(args.dataset))
+    torch.save(net_glob, './save/decentralized_final_{}.pkl'.format(args.dataset))
 
     # plot loss curve
     plt.figure()

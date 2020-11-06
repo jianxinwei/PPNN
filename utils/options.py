@@ -34,7 +34,7 @@ def args_parser():
     # other arguments
     parser.add_argument('--dataset', type=str, default='bank', help="name of dataset")
     parser.add_argument('--iid', action='store_true', help='whether i.i.d or not')
-    parser.add_argument('--num_classes', type=int, default=10, help="number of classes")
+    parser.add_argument('--num_classes', type=int, default=2, help="number of classes")
     parser.add_argument('--num_channels', type=int, default=3, help="number of channels of imges")
     parser.add_argument('--stopping_rounds', type=int, default=10, help='rounds of early stopping')
     parser.add_argument('--verbose', action='store_true', help='verbose print')
@@ -47,5 +47,10 @@ def args_parser():
     parser.add_argument('--dim_hidden', type=int, default=32, help='hidden layer dimension')
     parser.add_argument('--n_length', type=int, default=1024, help='Key size in bits, designed for TPHE')
     parser.add_argument('--num_share', type=int, default=2, help='Minimum number to decrpt ciphertexts, designed for TPHE')
+    
+    parser.add_argument('--train_ratio', type=float, default=0.6)
+    parser.add_argument('--valid_ratio', type=float, default=0.2)
+    parser.add_argument('--test_ratio', type=float, default=0.2)
+
     args = parser.parse_args()
     return args
