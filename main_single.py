@@ -16,6 +16,8 @@ from models.Fed import FedAvg
 from models.test import test_bank
 from utils.utils import *
 
+import ipdb
+
 if __name__ == '__main__':
     args = args_parser()
     args.device = torch.device('cuda:{}'.format(torch.cuda.device_count()-1) if torch.cuda.is_available() and args.gpu != -1 else 'cpu')

@@ -16,4 +16,4 @@ ipport_dict = {
 }
 
 with open(file, 'w') as f:
-	json.dump(ipport_dict, f)
+	json.dump(ipport_dict, f, indent=4)

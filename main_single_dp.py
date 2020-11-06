@@ -45,7 +45,7 @@ if __name__ == '__main__':
 
     print(net_glob)
     net_glob.train()
-    w_glob = net_glob.state_dict()
+    # w_glob = net_glob.state_dict()
 
     # training
     loss_train = []
