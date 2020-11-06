@@ -16,7 +16,6 @@ from models.Fed import FedAvg
 from models.test import test_bank
 from utils.utils import *
 
-import ipdb
 
 if __name__ == '__main__':
     args = args_parser()
