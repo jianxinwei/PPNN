@@ -64,7 +64,9 @@ if __name__ == '__main__':
         train_loaders = [clientDataloader(train_attributes, train_labels, dict_clients[u], batchsize=args.local_bs)
             for u in users]
         localss = [LocalUpdate(args=args) for _ in users]
-  
+
+    loss_valid = []
+    best_valid_loss = np.finfo(float).max
     with timer() as t:
         for iter in range(args.epochs):
             loss_locals = []
@@ -87,21 +89,35 @@ if __name__ == '__main__':
             loss_avg = sum(loss_locals) / len(loss_locals)
             print('Round{:3d}, Average loss {:.3f}'.format(iter, loss_avg))
             loss_train.append(loss_avg)
+            net_glob.eval()
+            acc_valid, tmp_loss_valid = test_bank(net_glob, valid_loader, args)
+            print('Round{:3d}, Validation loss {:.3f}'.format(iter, tmp_loss_valid))
+            loss_valid.append(tmp_loss_valid)
+            if tmp_loss_valid < best_valid_loss:
+                best_valid_loss = tmp_loss_valid
+                torch.save(net_glob, './save/fl_best_{}.pkl'.format(args.dataset))
+                print('SAVE BEST MODEL AT EPOCH {}'.format(iter))
+            net_glob.train()
 
     torch.save(net_glob, './save/fl_final_{}.pkl'.format(args.dataset))
 
     # plot loss curve
     plt.figure()
-    plt.plot(range(len(loss_train)), loss_train)
-    plt.ylabel('train_loss')
+    plt.plot(range(len(loss_train)), loss_train, 'ro-', label='train_loss')
+    plt.plot(range(len(loss_valid)), loss_valid, 'b^-', label='valid_loss')
+    plt.ylabel('loss')
     plt.xlabel('epoch')
+    plt.grid(True)
+    plt.legend(loc=0)
     plt.savefig('./save/{}_fl_{}_{}.png'.format(args.dataset, args.model, args.epochs))
 
     # testing
     train_loader = DataLoader(dataset=TensorDataset(train_attributes, train_labels), batch_size=args.bs, shuffle=True)
-    # net_glob = torch.load('./save/fl_{}.pkl'.format(args.dataset))
+    net_glob = torch.load('./save/fl_best_{}.pkl'.format(args.dataset))
     net_glob.eval()
     acc_train, loss_train = test_bank(net_glob, train_loader, args)
+    acc_valid, loss_valid = test_bank(net_glob, valid_loader, args)
     acc_test, loss_test = test_bank(net_glob, test_loader, args)
-    print("Training accuracy: {:.2f}".format(acc_train))
-    print("Testing accuracy: {:.2f}".format(acc_test))
+    print("Training accuracy: {:.2f}".format(acc_train), "Training loss: {:.2f}".format(loss_train))
+    print("Validating accuracy: {:.2f}".format(acc_valid), "Validating loss: {:.2f}".format(loss_valid))
+    print("Testing accuracy: {:.2f}".format(acc_test), "Testing loss: {:.2f}".format(loss_test))
