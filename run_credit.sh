@@ -1,8 +1,10 @@
-python main_single.py --epochs=1 --local_ep=1 --dim_hidden=4 --dataset=credit
-python main_single_dp.py --epochs=1 --local_ep=1 --dim_hidden=4 --dataset=credit
-python main_fl.py --epochs=1 --local_ep=1 --dim_hidden=4 --dataset=credit
-python main_fl_dp.py --epochs=1 --local_ep=1 --dim_hidden=4 --dataset=credit
-python main_decentralized.py --epochs=1 --local_ep=1 --dim_hidden=4 --dataset=credit
-python main_decentralized_dp.py --epochs=1 --local_ep=1 --dim_hidden=4 --dataset=credit
-python main_decentralized_tphe.py --epochs=1 --local_ep=1 --dim_hidden=4 --dataset=credit
-python main_decentralized_tphe_dp.py --epochs=1 --local_ep=1 --dim_hidden=4 --dataset=credit
+nohup python main_one_node.py --epochs=100 --dataset=credit --lr=0.001 > logs/one_node_credit.log 2>&1 &
+nohup python main_one_node_dp.py --epochs=100 --dataset=credit --lr=0.001 > logs/one_node_dp_credit.log 2>&1 &
+nohup python main_single.py --epochs=100 --dataset=credit --lr=0.001 > logs/single_credit.log 2>&1 &
+nohup python main_single_dp.py --epochs=100 --dataset=credit --lr=0.001 > logs/single_dp_credit.log 2>&1 &
+nohup python main_fl.py --epochs=100 --dataset=credit --lr=0.001 > logs/fl_credit.log 2>&1 &
+nohup python main_fl_dp.py --epochs=100 --dataset=credit --lr=0.001 > logs/fl_dp_credit.log 2>&1 &
+nohup python main_decentralized.py --epochs=100 --dataset=credit --lr=0.001 > logs/decentralized_credit.log 2>&1 &
+nohup python main_decentralized_dp.py --epochs=100 --dataset=credit --lr=0.001 > logs/decentralized_dp_credit.log 2>&1 &
+nohup python main_decentralized_tphe.py --epochs=100 --dataset=credit --lr=0.001 > logs/decentralized_tphe_credit.log 2>&1 &
+nohup python main_decentralized_tphe_dp.py --epochs=100 --dataset=credit --lr=0.001 > logs/decentralized_tphe_dp_credit.log 2>&1 &

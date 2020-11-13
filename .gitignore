@@ -134,4 +134,6 @@ sftp-config.json
 
 *.png
 
+*.pkl
+
 .gitkeep

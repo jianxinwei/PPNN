@@ -1,0 +1,10 @@
+nohup python main_one_node.py --epochs=100 --dataset=bank_random --lr=0.001 > logs/one_node_bank_random.log 2>&1 &
+nohup python main_one_node_dp.py --epochs=100 --dataset=bank_random --lr=0.001 > logs/one_node_dp_bank_random.log 2>&1 &
+nohup python main_single.py --epochs=100 --dataset=bank_random --lr=0.001 > logs/single_bank_random.log 2>&1 &
+nohup python main_single_dp.py --epochs=100 --dataset=bank_random --lr=0.001 > logs/single_dp_bank_random.log 2>&1 &
+nohup python main_fl.py --epochs=100 --dataset=bank_random --lr=0.001 > logs/fl_bank_random.log 2>&1 &
+nohup python main_fl_dp.py --epochs=100 --dataset=bank_random --lr=0.001 > logs/fl_dp_bank_random.log 2>&1 &
+nohup python main_decentralized.py --epochs=100 --dataset=bank_random --lr=0.001 > logs/decentralized_bank_random.log 2>&1 &
+nohup python main_decentralized_dp.py --epochs=100 --dataset=bank_random --lr=0.001 > logs/decentralized_dp_bank_random.log 2>&1 &
+nohup python main_decentralized_tphe.py --epochs=100 --dataset=bank_random --lr=0.001 > logs/decentralized_tphe_bank_random.log 2>&1 &
+nohup python main_decentralized_tphe_dp.py --epochs=100 --dataset=bank_random --lr=0.001 > logs/decentralized_tphe_dp_bank_random.log 2>&1 &
