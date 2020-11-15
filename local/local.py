@@ -20,7 +20,6 @@ sys.path.append('..')
 
 from utils.partition import dataset_iid
 from utils.options import args_parser
-from utils.dataToDataloader import dfToTensor, clientDataloader
 from models.Nets import MLP
 from models.Fed import FedAvg
 from models.test import test_bank
@@ -31,26 +30,8 @@ from utils.optim import *
 if __name__ == '__main__':
     args = args_parser()
     args.device = torch.device('cuda:{}'.format(torch.cuda.device_count()-1) if torch.cuda.is_available() and args.gpu != -1 else 'cpu')
-    wholedataset = pd.read_csv('../data/{}/new_{}_whole.csv'.format(args.dataset, args.dataset), sep=';')
-    trainset, validset, testset = np.split(wholedataset, [int(args.train_ratio*len(wholedataset)), int((args.train_ratio + args.valid_ratio)*len(wholedataset))])
-
-    train_attributes, train_labels = dfToTensor(trainset)
-    train_attributes = train_attributes.to(args.device)
-    train_labels = train_labels.to(args.device, dtype=torch.long)
-    attrisize = list(train_attributes[0].size())[0]
-    classes = args.num_classes
-
-    valid_attributes, valid_labels = dfToTensor(validset)
-    valid_attributes = valid_attributes.to(args.device)
-    valid_labels = valid_labels.to(args.device, dtype=torch.long)
-    valid_loader = DataLoader(dataset=TensorDataset(valid_attributes, valid_labels), batch_size=args.bs, shuffle=True)
-
-    # print(attrisize, classes)
-    test_attributes, test_labels = dfToTensor(testset)
-    test_attributes = test_attributes.to(args.device)
-    test_labels = test_labels.to(args.device, dtype=torch.long)
-    # dict_clients = dataset_iid(trainset, args.num_users)
-    test_loader = DataLoader(dataset=TensorDataset(test_attributes, test_labels), batch_size=args.bs, shuffle=True)
+    train_attributes, train_labels, valid_attributes, valid_labels, test_attributes, test_labels = data_loading(args) 
+    ipdb.set_trace()
 
     # build model
     if args.gpu != -1:
@@ -66,6 +47,7 @@ if __name__ == '__main__':
     loss_train = []
     net_best = None
     best_loss = None
+
 
     optimizer = torch.optim.SGD(net_glob.parameters(), lr=args.lr, momentum=args.momentum)
     train_loader = DataLoader(dataset=TensorDataset(train_attributes, train_labels), batch_size=args.bs, shuffle=True)
@@ -113,8 +95,6 @@ if __name__ == '__main__':
     # testing
     net_glob = torch.load('../save/local_best_{}.pkl'.format(args.dataset))
     net_glob.eval()
-    if args.gpu != -1:
-        test_loader = DataLoader(dataset=TensorDataset(test_attributes, test_labels), batch_size=args.bs, shuffle=True)
     acc_train, loss_train = test_bank(net_glob, train_loader, args)
     acc_valid, loss_valid = test_bank(net_glob, valid_loader, args)
     acc_test, loss_test = test_bank(net_glob, test_loader, args)

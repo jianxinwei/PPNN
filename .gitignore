@@ -137,3 +137,5 @@ sftp-config.json
 *.pkl
 
 .gitkeep
+
+.DS_store
