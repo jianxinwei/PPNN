@@ -403,3 +403,15 @@ class Novograd(torch.optim.Optimizer):
                     p.data.add_(exp_avg, alpha=-group["lr"])
 
         return 
+
+
+def get_optimizer(args, net):
+    args.optim = args.optim.lower()
+    if args.optim == 'adam':
+        return torch.optim.Adam(net.parameters(), lr=args.lr)
+    elif args.optim == 'novograd':
+        return Novograd(net.parameters(), lr=args.lr)
+    elif args.optim == 'adafactor':
+        return Adafactor(net.parameters())
+    else: # default, sgd
+        return torch.optim.SGD(net.parameters(), lr=args.lr, momentum=args.momentum)

@@ -52,11 +52,11 @@ def args_parser():
     parser.add_argument('--valid_ratio', type=float, default=0.2)
     parser.add_argument('--test_ratio', type=float, default=0.2)
 
-    parser.add_argument('--optimizer', type=str, default='Adam')
+    parser.add_argument('--optim', type=str, default='Adam')
 
-    parser.add_argument('--dp', type=bool, default=False, help='Enable differential privacy')
+    parser.add_argument('--dp', action='store_true', help='Enable differential privacy')
 
-    parser.add_argument('--tphe', type=bool, default=False, help='Enable TPHE')
+    parser.add_argument('--tphe', action='store_true', help='Enable TPHE')
 
     args = parser.parse_args()
     return args

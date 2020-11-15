@@ -128,7 +128,7 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
-# data/
+data/
 sftp-config.json
 *.tar.gz
 
@@ -139,3 +139,6 @@ sftp-config.json
 .gitkeep
 
 .DS_store
+
+*.pt
+*.pth
