@@ -15,7 +15,7 @@ from models.Nets import MLP
 from models.Fed import FedAvg
 from models.test import test_bank
 from utils.utils import *
-from utils.adafactor import Adafactor
+from utils.optim import *
 import ipdb
 
 if __name__ == '__main__':

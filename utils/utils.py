@@ -28,10 +28,10 @@ def net_avg_workers(net, num):
 def memory_time_moniter():
 	"""Helper for measuring runtime and memory cost"""
 	m0 = memory_profiler.memory_usage()
-	tracemalloc.start()
+	# tracemalloc.start()
 	time0 = time.perf_counter()
 	yield
 	print('[elapsed time: %.7f s]' % (time.perf_counter() - time0))
 	print('[took memory: %.7f Mb]' % (memory_profiler.memory_usage()[0] - m0[0]))
-	current, peak = tracemalloc.get_traced_memory()
-	print(f"Current memory usage is {current / 10**6}MB; Peak was {peak / 10**6}MB")
+	# current, peak = tracemalloc.get_traced_memory()
+	# print(f"Current memory usage is {current / 10**6}MB; Peak was {peak / 10**6}MB")

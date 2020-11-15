@@ -15,7 +15,6 @@ from models.Nets import MLP
 from models.Fed import FedAvg
 from models.test import test_bank
 from utils.utils import *
-from utils.adam import Adam
 import ipdb
 
 if __name__ == '__main__':
@@ -61,7 +60,7 @@ if __name__ == '__main__':
     net_best = None
     best_loss = None
 
-    optimizer = Adam(net_glob.parameters(), lr=args.lr)
+    optimizer = torch.optim.Adam(net_glob.parameters(), lr=args.lr)
     train_loader = DataLoader(dataset=TensorDataset(train_attributes, train_labels), batch_size=args.bs, shuffle=True)
     loss_func = nn.CrossEntropyLoss()
 
