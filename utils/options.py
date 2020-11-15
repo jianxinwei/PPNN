@@ -44,14 +44,19 @@ def args_parser():
                         help='Enable Secure RNG to have trustworthy privacy guarantees. Comes at a performance cost')
     parser.add_argument('--pb_interval', type=int, default=200, help='Computes the (epsilon, delta) privacy budget spent so far.')
     parser.add_argument('--gpu', type=int, default=-1, help="GPU ID, -1 for CPU")
-    # parser.add_argument('--dim_hidden', type=int, default=32, help='hidden layer dimension')
-    parser.add_argument('--dim_hidden', type=int, default=320, help='hidden layer dimension')
+    parser.add_argument('--dim_hidden', type=int, default=32, help='hidden layer dimension')
     parser.add_argument('--n_length', type=int, default=1024, help='Key size in bits, designed for TPHE')
     parser.add_argument('--num_share', type=int, default=2, help='Minimum number to decrpt ciphertexts, designed for TPHE')
     
     parser.add_argument('--train_ratio', type=float, default=0.6)
     parser.add_argument('--valid_ratio', type=float, default=0.2)
     parser.add_argument('--test_ratio', type=float, default=0.2)
+
+    parser.add_argument('--optimizer', type=str, default='Adam')
+
+    parser.add_argument('--dp', type=bool, default=False, help='Enable differential privacy')
+
+    parser.add_argument('--tphe', type=bool, default=False, help='Enable TPHE')
 
     args = parser.parse_args()
     return args
