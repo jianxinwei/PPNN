@@ -15,6 +15,7 @@ from models.Nets import MLP
 from models.Fed import FedAvg
 from models.test import test_bank
 from utils.utils import *
+from utils.adam import Adam
 import ipdb
 
 if __name__ == '__main__':
@@ -60,7 +61,7 @@ if __name__ == '__main__':
     net_best = None
     best_loss = None
 
-    optimizer = torch.optim.SGD(net_glob.parameters(), lr=args.lr, momentum=args.momentum)
+    optimizer = Adam(net_glob.parameters(), lr=args.lr)
     train_loader = DataLoader(dataset=TensorDataset(train_attributes, train_labels), batch_size=args.bs, shuffle=True)
     loss_func = nn.CrossEntropyLoss()
 
@@ -87,11 +88,11 @@ if __name__ == '__main__':
             loss_valid.append(tmp_loss_valid)
             if tmp_loss_valid < best_valid_loss:
                 best_valid_loss = tmp_loss_valid
-                torch.save(net_glob, './save/single_best_{}.pkl'.format(args.dataset))
+                torch.save(net_glob, './save/adam_single_best_{}.pkl'.format(args.dataset))
                 print('SAVE BEST MODEL AT EPOCH {}'.format(iter))
             net_glob.train()
 
-    torch.save(net_glob, './save/single_final_{}.pkl'.format(args.dataset))
+    torch.save(net_glob, './save/adam_single_final_{}.pkl'.format(args.dataset))
 
     # plot loss curve
     plt.figure()
@@ -101,10 +102,10 @@ if __name__ == '__main__':
     plt.xlabel('epoch')
     plt.grid(True)
     plt.legend(loc=0)
-    plt.savefig('./save/{}_single_{}_{}.png'.format(args.dataset, args.model, args.epochs))
+    plt.savefig('./save/{}_adam_single_{}_{}.png'.format(args.dataset, args.model, args.epochs))
 
     # testing
-    net_glob = torch.load('./save/single_best_{}.pkl'.format(args.dataset))
+    net_glob = torch.load('./save/adam_single_best_{}.pkl'.format(args.dataset))
     net_glob.eval()
     if args.gpu != -1:
         test_loader = DataLoader(dataset=TensorDataset(test_attributes, test_labels), batch_size=args.bs, shuffle=True)

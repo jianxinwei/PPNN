@@ -14,8 +14,9 @@ from utils.dataToDataloader import dfToTensor, clientDataloader
 from models.Nets import MLP
 from models.Fed import FedAvg
 from models.test import test_bank
+from opacus import PrivacyEngine
+from utils.adafactor import Adafactor
 from utils.utils import *
-import ipdb
 
 if __name__ == '__main__':
     args = args_parser()
@@ -43,7 +44,7 @@ if __name__ == '__main__':
     test_attributes = test_attributes.to(args.device)
     test_labels = test_labels.to(args.device, dtype=torch.long)
     # dict_clients = dataset_iid(trainset, args.num_users)
-    test_loader = DataLoader(dataset=TensorDataset(test_attributes, test_labels), batch_size=args.bs, shuffle=True)
+    test_loader = DataLoader(dataset=TensorDataset(test_attributes, test_labels), batch_size=args.bs, shuffle=True, drop_last=True)
 
     # build model
     if args.gpu != -1:
@@ -53,20 +54,26 @@ if __name__ == '__main__':
 
     print(net_glob)
     net_glob.train()
-    w_glob = net_glob.state_dict()
+    # w_glob = net_glob.state_dict()
 
     # training
     loss_train = []
     net_best = None
     best_loss = None
 
-    optimizer = torch.optim.SGD(net_glob.parameters(), lr=args.lr, momentum=args.momentum)
+    optimizer = Adafactor(net_glob.parameters())
     train_loader = DataLoader(dataset=TensorDataset(train_attributes, train_labels), batch_size=args.bs, shuffle=True)
     loss_func = nn.CrossEntropyLoss()
 
+    args.secure_rng = True
+    privacy_engine = PrivacyEngine(net_glob, batch_size=args.bs, sample_size=len(train_loader),
+                                   alphas=[1 + x / 10.0 for x in range(1, 100)] + list(range(12, 64)),
+                                   noise_multiplier=0.3, max_grad_norm=1.2, secure_rng=args.secure_rng)
+    privacy_engine.attach(optimizer)
+
     loss_valid = []
     best_valid_loss = np.finfo(float).max
-    with memory_time_moniter() as mt:
+    with timer() as t:
         for iter in range(args.epochs):
             batch_loss = []
             for batch_idx, (data, target) in enumerate(train_loader):
@@ -81,17 +88,26 @@ if __name__ == '__main__':
             print('Round{:3d}, Average loss {:.3f}'.format(iter, loss_avg))
             loss_train.append(loss_avg)
 
+            '''
+            if batch_idx % args.pb_interval == 0:
+                epsilon, best_alpha = optimizer.privacy_engine.get_privacy_spent(args.delta)
+                print(
+                    f"\tTrain Epoch: {iter} \t"
+                    f"Loss: {loss_avg:.6f} "
+                    f"(ε = {epsilon:.2f}, δ = {self.args.delta})"
+                )
+            '''
             net_glob.eval()
             acc_valid, tmp_loss_valid = test_bank(net_glob, valid_loader, args)
             print('Round{:3d}, Validation loss {:.3f}'.format(iter, tmp_loss_valid))
             loss_valid.append(tmp_loss_valid)
             if tmp_loss_valid < best_valid_loss:
                 best_valid_loss = tmp_loss_valid
-                torch.save(net_glob, './save/single_best_{}.pkl'.format(args.dataset))
+                torch.save(net_glob, './save/adafactor_single_dp_best_{}.pkl'.format(args.dataset))
                 print('SAVE BEST MODEL AT EPOCH {}'.format(iter))
             net_glob.train()
 
-    torch.save(net_glob, './save/single_final_{}.pkl'.format(args.dataset))
+    torch.save(net_glob, './save/adafactor_single_dp_final_{}.pkl'.format(args.dataset))
 
     # plot loss curve
     plt.figure()
@@ -101,10 +117,10 @@ if __name__ == '__main__':
     plt.xlabel('epoch')
     plt.grid(True)
     plt.legend(loc=0)
-    plt.savefig('./save/{}_single_{}_{}.png'.format(args.dataset, args.model, args.epochs))
+    plt.savefig('./save/{}_adafactor_single_dp_{}_{}.png'.format(args.dataset, args.model, args.epochs))
 
     # testing
-    net_glob = torch.load('./save/single_best_{}.pkl'.format(args.dataset))
+    net_glob = torch.load('./save/adafactor_single_dp_best_{}.pkl'.format(args.dataset))
     net_glob.eval()
     if args.gpu != -1:
         test_loader = DataLoader(dataset=TensorDataset(test_attributes, test_labels), batch_size=args.bs, shuffle=True)

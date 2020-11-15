@@ -15,7 +15,7 @@ def args_parser():
     # parser.add_argument('--local_ep', type=int, default=2, help="the number of local epochs: E")
     parser.add_argument('--local_bs', type=int, default=8, help="local batch size: B")
     parser.add_argument('--bs', type=int, default=8, help="test batch size")
-    parser.add_argument('--lr', type=float, default=0.01, help="learning rate")
+    parser.add_argument('--lr', type=float, default=0.005, help="learning rate")
     parser.add_argument('--momentum', type=float, default=0.5, help="SGD momentum (default: 0.5)")
     parser.add_argument('--split', type=str, default='user', help="train-test split type, user or sample")
 
@@ -44,7 +44,8 @@ def args_parser():
                         help='Enable Secure RNG to have trustworthy privacy guarantees. Comes at a performance cost')
     parser.add_argument('--pb_interval', type=int, default=200, help='Computes the (epsilon, delta) privacy budget spent so far.')
     parser.add_argument('--gpu', type=int, default=-1, help="GPU ID, -1 for CPU")
-    parser.add_argument('--dim_hidden', type=int, default=32, help='hidden layer dimension')
+    # parser.add_argument('--dim_hidden', type=int, default=32, help='hidden layer dimension')
+    parser.add_argument('--dim_hidden', type=int, default=320, help='hidden layer dimension')
     parser.add_argument('--n_length', type=int, default=1024, help='Key size in bits, designed for TPHE')
     parser.add_argument('--num_share', type=int, default=2, help='Minimum number to decrpt ciphertexts, designed for TPHE')
     
