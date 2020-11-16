@@ -65,7 +65,6 @@ if __name__ == '__main__':
 	server_socket.listen(10) # listen atmost 10 connection at one time
 	# server_socket.setblocking(True) # blocking mode
 	connected_list = []
-	client_cnt = 0
 	print("\33[32m \t\t\t\tSERVER WORKING \33[0m")
 
 	# training

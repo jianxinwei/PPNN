@@ -135,4 +135,4 @@ def normal_train(args, net, optimizer, loss_func, ldr_train, ldr_valid):
             	best_valid_net = copy.deepcopy(net)
             net.train()
 
-        return net.state_dict(), sum(epoch_loss) / len(epoch_loss)
+        return net.state_dict(), sum(epoch_loss) / len(epoch_loss)		

@@ -1,3 +1,4 @@
+import ipdb
 import socket
 import sys
 import time
@@ -10,7 +11,6 @@ import json
 Author : Maurice Snoeren <macsnoeren(at)gmail.com>
 Version: 0.3 beta (use at your own risk)
 Date: 7-5-2020
-
 Python package p2pnet for implementing decentralized peer-to-peer network applications
 """
 class NodeConnection(threading.Thread):

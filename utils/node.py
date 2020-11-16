@@ -1,3 +1,4 @@
+import ipdb
 import socket
 import sys
 import time
@@ -5,15 +6,13 @@ import threading
 import random
 import hashlib
 
-from p2pnetwork.nodeconnection import NodeConnection
+from nodeconnection import NodeConnection
 
 """
 Author: Maurice Snoeren <macsnoeren(at)gmail.com>
 Version: 0.3 beta (use at your own risk)
 Date: 7-5-2020
-
 Python package p2pnet for implementing decentralized peer-to-peer network applications
-
 TODO: Variabele to limit the number of connected nodes.
 TODO: Also create events when things go wrong, like a connection with a node has failed.
 """
@@ -21,7 +20,6 @@ TODO: Also create events when things go wrong, like a connection with a node has
 class Node(threading.Thread):
     """Implements a node that is able to connect to other nodes and is able to accept connections from other nodes.
     After instantiation, the node creates a TCP/IP server with the given port.
-
     Create instance of a Node. If you want to implement the Node functionality with a callback, you should 
     provide a callback method. It is preferred to implement a new node by extending this Node class. 
       host: The host name or ip address that is used to bind the TCP/IP server to.
