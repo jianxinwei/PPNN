@@ -23,6 +23,40 @@ class MLP(nn.Module):
         return x
 
 
+class LargeMLP(nn.Module):
+    def __init__(self, dim_in, args, dim_out):
+        super(LargeMLP, self).__init__()
+        self.layer_input = nn.Linear(dim_in, args.farm_hidden_1)
+        self.dropout_0 = nn.Dropout()
+        self.relu_0 = nn.ReLU()
+        self.layer_hidden_1 = nn.Linear(args.farm_hidden_1, args.farm_hidden_2)
+        self.dropout_1 = nn.Dropout()
+        self.relu_1 = nn.ReLU()
+        self.layer_hidden_2 = nn.Linear(args.farm_hidden_2, args.farm_hidden_3)
+        self.dropout_2 = nn.Dropout()
+        self.relu_2 = nn.ReLU()
+        self.layer_hidden_3 = nn.Linear(args.farm_hidden_3, args.farm_hidden_4)
+        self.dropout_3 = nn.Dropout()
+        self.relu_3 = nn.ReLU()
+        self.layer_hidden_4 = nn.Linear(args.farm_hidden_4, dim_out)
+
+    def forward(self, x):
+        x = self.layer_input(x)
+        x = self.dropout_0(x)
+        x = self.relu_0(x)
+        x = self.layer_hidden_1(x)
+        x = self.dropout_1(x)
+        x = self.relu_1(x)
+        x = self.layer_hidden_2(x)
+        x = self.dropout_2(x)
+        x = self.relu_2(x)
+        x = self.layer_hidden_3(x)
+        x = self.dropout_3(x)
+        x = self.relu_3(x)
+        x = self.layer_hidden_4(x)
+        return x
+
+
 class CNNMnist(nn.Module):
     def __init__(self, args):
         super(CNNMnist, self).__init__()

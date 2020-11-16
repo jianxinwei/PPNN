@@ -3,6 +3,7 @@
 
 import copy
 import ipdb
+import pickle
 import sys
 
 import matplotlib
@@ -15,12 +16,13 @@ import torch
 from torch import nn
 from torch.utils.data import DataLoader, TensorDataset
 from torchvision import datasets, transforms
+import torchcsprng as prng
 
 sys.path.append('..')
 
 from utils.partition import dataset_iid
 from utils.options import args_parser
-from models.Nets import MLP
+from models.Nets import *
 from models.Fed import FedAvg
 from models.test import test_bank
 from utils.data_to_dataloader import *
@@ -33,14 +35,13 @@ if __name__ == '__main__':
     args.device = torch.device('cuda:{}'.format(torch.cuda.device_count()-1) if torch.cuda.is_available() and args.gpu != -1 else 'cpu')
 
     save_prefix = '../save/{}_{}_{}_{}_{}_local'.format(args.dataset, args.model, args.optim, args.epochs, args.dataset)
+
     if args.dp:
         save_prefix = save_prefix + '_dp'
     if args.tphe:
         save_prefix = save_prefix + '_tphe'
 
     train_attributes, train_labels, valid_attributes, valid_labels, test_attributes, test_labels = data_loading(args) 
-    train_attributes, _ = np.split(train_attributes, [(int(1/args.num_users*len(train_attributes)))])
-    train_labels, _ = np.split(train_labels, [(int(1/args.num_users*len(train_labels)))])
     attrisize = list(train_attributes[0].size())[0]
     train_loader = DataLoader(dataset=TensorDataset(train_attributes, train_labels), batch_size=args.bs, shuffle=True)
     valid_loader = DataLoader(dataset=TensorDataset(valid_attributes, valid_labels), batch_size=args.bs, shuffle=True)
@@ -51,16 +52,15 @@ if __name__ == '__main__':
         net_glob = MLP(dim_in=attrisize, dim_hidden=args.dim_hidden, dim_out=args.num_classes).to(args.device)
     else:
         net_glob = MLP(dim_in=attrisize, dim_hidden=args.dim_hidden, dim_out=args.num_classes)
-
+    if args.dataset == 'farm':
+        if args.gpu != -1:
+            net_glob = LargeMLP(dim_in=attrisize, args=args, dim_out=args.num_classes).to(args.device)
+        else:
+            net_glob = LargeMLP(dim_in=attrisize, args=args, dim_out=args.num_classes)
     print(net_glob)
     net_glob.train()
-    w_glob = net_glob.state_dict()
 
-    # training
-    loss_train = []
-    net_best = None
-    best_loss = None
-
+    loss_func = nn.CrossEntropyLoss()
     optimizer = get_optimizer(args, net_glob)
     if args.dp:
         args.secure_rng = True
@@ -68,11 +68,17 @@ if __name__ == '__main__':
                                        alphas=[1 + x / 10.0 for x in range(1, 100)] + list(range(12, 64)),
                                        noise_multiplier=0.3, max_grad_norm=1.2, secure_rng=args.secure_rng)
         privacy_engine.attach(optimizer)
+        generator = (
+            prng.create_random_device_generator("/dev/urandom") if args.secure_rng else None
+        )
+        train_loader = prngDataloader(train_attributes, train_labels, [idx for idx in range(len(train_attributes))], batchsize=args.local_bs, gene=generator)
 
-    loss_func = nn.CrossEntropyLoss()
-
+    # training
+    loss_train = []
     loss_valid = []
     best_valid_loss = np.finfo(float).max
+    best_net_glob = copy.deepcopy(net_glob)
+
     with memory_time_moniter() as mt:
         for iter in range(args.epochs):
             batch_loss = []
@@ -94,10 +100,11 @@ if __name__ == '__main__':
             loss_valid.append(tmp_loss_valid)
             if tmp_loss_valid < best_valid_loss:
                 best_valid_loss = tmp_loss_valid
-                torch.save(net_glob, save_prefix + '_best.pt')
+                best_net_glob = copy.deepcopy(net_glob)
                 print('SAVE BEST MODEL AT EPOCH {}'.format(iter))
             net_glob.train()
 
+    torch.save(best_net_glob, save_prefix + '_best.pt')
     torch.save(net_glob, save_prefix + '_final.pt')
 
     # plot loss curve

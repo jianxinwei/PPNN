@@ -13,3 +13,5 @@ def dataset_iid(dataset, num_clients=4):
         dict_clients[i] = set(np.random.choice(all_idxs, num_items, replace=False))
         all_idxs = list(set(all_idxs) - dict_clients[i])
     return dict_clients
+
+
