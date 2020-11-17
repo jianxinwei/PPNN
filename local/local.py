@@ -34,7 +34,7 @@ if __name__ == '__main__':
     args = args_parser()
     args.device = torch.device('cuda:{}'.format(torch.cuda.device_count()-1) if torch.cuda.is_available() and args.gpu != -1 else 'cpu')
 
-    save_prefix = '../save/{}_{}_{}_{}_{}_local'.format(args.dataset, args.model, args.optim, args.epochs, args.dataset)
+    save_prefix = '../save/{}_{}_{}_{}_local'.format(args.dataset, args.model, args.optim, args.epochs)
 
     if args.dp:
         save_prefix = save_prefix + '_dp'

@@ -8,7 +8,6 @@ import random
 import select
 import socket
 import sys
-import threading
 import time
 
 import matplotlib
@@ -36,13 +35,6 @@ from utils.tphe import *
 from utils.utils import *
 
 
-sending_flag = False
-receiving_flag = False
-stop_sending_flag = False
-stop_receiving_flah = False
-
-
-
 def listen():
 	while True:
 		sockfd, addr = server_socket.accept()
@@ -54,8 +46,8 @@ def listen():
 def connect(client_rank):
 	while True:
 		try:
-			client_sockets[client_sockets_rank2idx[client_rank]].connect((ip_port[client_rank]['ip'], ip_port[client_rank]['port']))
-			client_sockets[client_sockets_rank2idx[client_rank]].setblocking(True)
+			client_sockets[rank2idx[client_rank]].connect((ip_port[client_rank]['ip'], ip_port[client_rank]['port']))
+			client_sockets[rank2idx[client_rank]].setblocking(True)
 			break
 		except:
 			# print("\33[31m\33[1m Can't connect to the node {} \33[0m".format(client_rank))
@@ -80,8 +72,16 @@ def send_metadata_to_all(cur_train_loss, cur_valid_loss, next_server_rank_id):
 
 def send_tphe_to_all():
 	for idx, sockfd in enumerate(server_connection_list):
-		sockfd.send(pickle.dumps([pub_key, priv_keys[client_sockets_idx2rank[idx]], tp_w, tp_delta, tp_combineSharesConstant]))
-
+		# paritial private key shares set up for server node
+		rank_sampling_list = [rank for rank in range(args.num_users) if rank != idx2rank[idx]]
+		random.shuffle(rank_sampling_list)
+		tmp_partial_priv_keys = []
+		tmp_partial_priv_keys.append(priv_keys[idx2rank[idx]])
+		for rank_idx in rank_sampling_list[:args.num_share-1]:
+			tmp_partial_priv_keys.append(priv_keys[rank_idx])
+		assert len(tmp_partial_priv_keys) == args.num_share
+		sockfd.send(pickle.dumps([pub_key, priv_keys[idx2rank[idx]], tp_w, tp_delta, tp_combineSharesConstant, tmp_partial_priv_keys]))
+		del tmp_partial_priv_keys
 
 def state_dict_aggregation(w_state_dict_locals):
 	intermediate_state_dict = copy.deepcopy(w_state_dict_locals[0])
@@ -96,39 +96,10 @@ def state_dict_aggregation(w_state_dict_locals):
 
 def parse_aggregated_state_dict(aggregated_state_dict, cur_net):
 	if args.tphe:
-		# send and receive partial shares, of which the operation sequence is the same as socket connections initialization
-		partial_priv_keys = partial_shares_send_receive()
 		decrypted_state_dict = decrypt_torch_state_dict(aggregated_state_dict, partial_priv_keys, 
 			tp_w, tp_delta, tp_combineSharesConstant, pub_key.nSPlusOne, pub_key.n, pub_key.ns, args.num_users, cur_net.state_dict())
 	else:
 		cur_net.load_state_dict(aggregated_state_dict)
-
-
-def partial_shares_send_receive():
-	partial_priv_keys = []
-	partial_priv_keys.append(priv_key)
-	rank_sampling_list = [idx for idx in range(args.num_users)]
-	rank_sampling_list.remove(args.rank)
-	partial_share_rank_set = set(random.choices(rank_sampling_list, k=args.num_share-1))
-	self_priv_key_pkl = pickle.dumps(priv_key)
-
-	# send priv key to the selected nodes
-	for rank_idx in partial_share_rank_set:
-		client_sockets[client_sockets_rank2idx[rank_idx]].send(self_priv_key_pkl)
-
-	# receive priv keys from the connected listening sockets
-	partial_shares_loop = True
-	while partial_shares_loop:
-		# Get the list sockets which are ready to be read through select
-		rList, wList, error_sockets = select.select(server_connection_list,[],[])
-		for sockfd in rList:
-			tmp_pkl_priv_key = sockfd.recv(int(args.buffer)) # 760586945
-			partial_priv_keys.append(pickle.loads(tmp_pkl_priv_key))
-			if len(partial_priv_keys) == args.num_share:
-				partial_shares_loop = False
-				break
-
-	return partial_priv_keys
 
 
 def server(cur_net, current_iter, current_server_rank_id, best_valid_loss, best_net_glob, server_flag):
@@ -218,19 +189,19 @@ def client(cur_net, current_iter, current_server_rank_id, best_valid_loss, best_
 
 	# send the state_dict to current server
 	if args.tphe:
-		client_sockets[client_sockets_rank2idx[current_server_rank_id]].send(pickle.dumps([encrypt_torch_state_dict(pub_key, current_state_dict), current_loss]))
+		client_sockets[rank2idx[current_server_rank_id]].send(pickle.dumps([encrypt_torch_state_dict(pub_key, current_state_dict), current_loss]))
 	else:
-		client_sockets[client_sockets_rank2idx[current_server_rank_id]].send(pickle.dumps([current_state_dict, current_loss]))
+		client_sockets[rank2idx[current_server_rank_id]].send(pickle.dumps([current_state_dict, current_loss]))
 
 	# recv the aggregated state dict from current server
-	aggregated_state_dict = client_sockets[client_sockets_rank2idx[current_server_rank_id]].recv(int(args.buffer))
+	aggregated_state_dict = client_sockets[rank2idx[current_server_rank_id]].recv(int(args.buffer))
 	aggregated_state_dict = pickle.loads(aggregated_state_dict)
 
 	# parse aggregated state_dict
 	parse_aggregated_state_dict(aggregated_state_dict, cur_net)
 
 	# recv metadata
-	metadata_list_pkl = client_sockets[client_sockets_rank2idx[current_server_rank_id]].recv(int(args.buffer))
+	metadata_list_pkl = client_sockets[rank2idx[current_server_rank_id]].recv(int(args.buffer))
 	loss_avg, tmp_loss_valid, next_server_rank_id = pickle.loads(metadata_list_pkl)
 	loss_train.append(loss_avg)
 	loss_valid.append(tmp_loss_valid)
@@ -260,8 +231,7 @@ if __name__ == '__main__':
 	if args.rank == None:
 		sys.exit(1)
 
-	save_prefix = '../save/{}_{}_{}_{}_{}_decentralized'.format(args.dataset, args.model, args.optim, args.epochs, args.dataset)
-
+	save_prefix = '../save/{}_{}_{}_{}_decentralized'.format(args.dataset, args.model, args.optim, args.epochs)
 	if args.dp:
 		save_prefix = save_prefix + '_dp'
 	if args.tphe:
@@ -280,6 +250,7 @@ if __name__ == '__main__':
 	tp_w = None
 	tp_delta = None
 	tp_combineSharesConstant = None
+	partial_priv_keys = None
 	if args.tphe and server_flag:
 		thresholdPaillier = ThresholdPaillier(args.n_length, args.num_users, args.num_share)
 		pub_key = thresholdPaillier.pub_key
@@ -288,6 +259,15 @@ if __name__ == '__main__':
 		tp_w = thresholdPaillier.w
 		tp_delta = thresholdPaillier.delta
 		tp_combineSharesConstant = thresholdPaillier.combineSharesConstant
+
+		# paritial private key shares set up for server node
+		rank_sampling_list = [rank for rank in range(args.num_users) if rank != args.rank]
+		random.shuffle(rank_sampling_list)
+		partial_priv_keys = []
+		partial_priv_keys.append(priv_key)
+		for rank_idx in rank_sampling_list[:args.num_share-1]:
+			partial_priv_keys.append(priv_keys[rank_idx])
+		assert len(partial_priv_keys) == args.num_share
 
 	train_attributes, train_labels, valid_attributes, valid_labels, test_attributes, test_labels = data_loading(args) 
 	attrisize = list(train_attributes[0].size())[0]
@@ -303,7 +283,17 @@ if __name__ == '__main__':
 		local_train_loader = prngDataloader(train_attributes, train_labels, local_train_idxes, batchsize=args.local_bs, gene=generator)
 
 	# Initialize socket connections
-	ip_port = read_ip_port_json('../ip_port.json')
+	# ip_port = read_ip_port_json('../ip_port_client_server.json')
+	json_path = '../json/decentralized_{}_{}.json'.format(args.dataset, args.optim.lower())
+	if args.dp:
+		json_path = '../json/decentralized_{}_{}_dp.json'.format(args.dataset, args.optim.lower())
+	if args.tphe:
+		json_path = '../json/decentralized_{}_{}_tphe.json'.format(args.dataset, args.optim.lower())
+		if args.dp:
+			json_path = '../json/decentralized_{}_{}_dp_tphe.json'.format(args.dataset, args.optim.lower())
+	ip_port = read_ip_port_json(json_path)
+	print(ip_port)
+
 	self_ip = ip_port[args.rank]['ip']
 	self_port = ip_port[args.rank]['port']
 	del ip_port[args.rank]
@@ -312,15 +302,15 @@ if __name__ == '__main__':
 	server_socket.listen(10) # listen atmost 10 connection at one time
 	server_connection_list = []
 	client_sockets = [socket.socket(socket.AF_INET, socket.SOCK_STREAM) for _ in range(args.num_users-1)]
-	client_sockets_rank2idx = {}
-	client_sockets_idx2rank = {}
+	rank2idx = {}
+	idx2rank = {}
 	client_socket_idx = 0
 	for client_rank in range(args.num_users):
 		if client_rank == args.rank:
 			listen()
 		else:
-			client_sockets_rank2idx[client_rank] = client_socket_idx
-			client_sockets_idx2rank[client_socket_idx] = client_rank
+			rank2idx[client_rank] = client_socket_idx
+			idx2rank[client_socket_idx] = client_rank
 			connect(client_rank)
 			client_socket_idx += 1
 
@@ -350,12 +340,12 @@ if __name__ == '__main__':
 			send_tphe_to_all() # distribute tphe elements to others
 	else: 
 		# receive the initiali net from current server
-		tmp_pkl_data = client_sockets[client_sockets_rank2idx[current_server_rank_id]].recv(int(args.buffer))
+		tmp_pkl_data = client_sockets[rank2idx[current_server_rank_id]].recv(int(args.buffer))
 		net_glob = pickle.loads(tmp_pkl_data)
 		if args.tphe:
 			# receive the tphe key pair
-			pkl_list = client_sockets[client_sockets_rank2idx[current_server_rank_id]].recv(int(args.buffer))
-			pub_key, priv_key, tp_w, tp_delta, tp_combineSharesConstant = pickle.loads(pkl_list)
+			pkl_list = client_sockets[rank2idx[current_server_rank_id]].recv(int(args.buffer))
+			pub_key, priv_key, tp_w, tp_delta, tp_combineSharesConstant, partial_priv_keys = pickle.loads(pkl_list)
 	
 	with memory_time_moniter() as mt:
 		for iter in range(args.epochs):
