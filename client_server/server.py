@@ -96,35 +96,12 @@ if __name__ == '__main__':
 		for iter in range(args.epochs):
 			loss_locals = []
 			w_state_dict_locals = []
-			# tmp_pkl_list = []
 			send_net_to_all(net_glob)
-
-			# wait for all clients finish training
-			'''
-			while True:
-				tmp_pkl_data = server_socket.recv(int(args.buffer)) # 760586945
-				# print(tmp_pkl_data, 'HHHH')
-				tmp_pkl_list.append(tmp_pkl_data)
-				if len(tmp_pkl_list) == args.num_users:
-					del tmp_pkl_data
-					continue
-			for tmp_pkl_data in tmp_pkl_list:
-				tmp_state_dict, tmp_loss = pickle.loads(tmp_pkl_data)
-				w_state_dict_locals.append(tmp_state_dict)
-				loss_locals.append(tmp_loss)
-		
-			for sockfd in connected_list:
-				tmp_pkl_data = sockfd.recv(int(args.buffer)) # 760586945
-				tmp_state_dict, tmp_loss = pickle.loads(tmp_pkl_data)
-				w_state_dict_locals.append(tmp_state_dict)
-				loss_locals.append(tmp_loss)
-			'''
 			loop = True
 			while loop:
 				# Get the list sockets which are ready to be read through select
-				rList,wList,error_sockets = select.select(connected_list,[],[])
+				rList, wList, error_sockets = select.select(connected_list,[],[])
 				for sockfd in rList:
-					# try:
 					tmp_pkl_data = sockfd.recv(int(args.buffer)) # 760586945
 					tmp_state_dict, tmp_loss = pickle.loads(tmp_pkl_data)
 					w_state_dict_locals.append(tmp_state_dict)
@@ -132,10 +109,6 @@ if __name__ == '__main__':
 					if len(w_state_dict_locals) == args.num_users:
 						loop = False
 						break
-					# except Exception as e:
-					# 	connected_list.remove(sockfd)
-					# 	sockfd.close()
-					# 	continue
 
 			# update global weights
 			w_state_dict_glob = FedAvg(w_state_dict_locals)
@@ -158,6 +131,11 @@ if __name__ == '__main__':
 	torch.save(net_glob, save_prefix + '_final.pt')
 	send_terminate_to_all()
 
+	for sockfd in connected_list:
+		sockfd.close()
+
+	server_socket.close()
+
 	# plot loss curve
 	plt.figure()
 	plt.plot(range(len(loss_train)), loss_train, 'r', label='train_loss')
@@ -177,8 +155,3 @@ if __name__ == '__main__':
 	print("Training accuracy: {:.2f}".format(acc_train), "Training loss: {:.2f}".format(loss_train))
 	print("Validating accuracy: {:.2f}".format(acc_valid), "Validating loss: {:.2f}".format(loss_valid))
 	print("Testing accuracy: {:.2f}".format(acc_test), "Testing loss: {:.2f}".format(loss_test))
-
-	for sockfd in connected_list:
-		sockfd.close()
-
-	server_socket.close()

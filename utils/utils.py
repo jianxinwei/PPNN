@@ -113,7 +113,7 @@ def normal_train(args, net, optimizer, loss_func, ldr_train, ldr_valid):
         epoch_loss = []
         best_valid_loss = np.finfo(float).max
         best_valid_net = copy.deepcopy(net)
-
+        net.train()
         for iter in range(args.local_ep):
             batch_loss = []
             for batch_idx, (attributes, labels) in enumerate(ldr_train):
@@ -123,10 +123,10 @@ def normal_train(args, net, optimizer, loss_func, ldr_train, ldr_valid):
                 loss = loss_func(log_probs, labels)
                 loss.backward()
                 optimizer.step()
-                if args.verbose and batch_idx % 10 == 0:
-                    print('Update Epoch: {} [{}/{} ({:.0f}%)]\tLoss: {:.6f}'.format(
-                        iter, batch_idx * len(attributes), len(ldr_train.dataset),
-                              100. * batch_idx / len(ldr_train), loss.item()))
+                # if args.verbose and batch_idx % 10 == 0:
+                #     print('Update Epoch: {} [{}/{} ({:.0f}%)]\tLoss: {:.6f}'.format(
+                #         iter, batch_idx * len(attributes), len(ldr_train.dataset),
+                #               100. * batch_idx / len(ldr_train), loss.item()))
                 batch_loss.append(loss.item())
             epoch_loss.append(sum(batch_loss) / len(batch_loss))
             net.eval()
@@ -135,4 +135,20 @@ def normal_train(args, net, optimizer, loss_func, ldr_train, ldr_valid):
             	best_valid_net = copy.deepcopy(net)
             net.train()
 
-        return net.state_dict(), sum(epoch_loss) / len(epoch_loss)		
+        return net.state_dict(), sum(epoch_loss) / len(epoch_loss)
+
+
+def remove_hooks(model: torch.nn.Module):
+    r"""
+    Removes hooks added by ``add_hooks()``.
+
+    Args:
+        model: Model from which hooks are to be removed.
+    """
+    if not hasattr(model, "autograd_grad_sample_hooks"):
+        pass
+    else:
+        # pyre-fixme[16]: `Module` has no attribute `autograd_grad_sample_hooks`.
+        for handle in model.autograd_grad_sample_hooks:
+            handle.remove()
+        del model.autograd_grad_sample_hooks

@@ -2,6 +2,9 @@
 #! ~/anaconda3/python3
 # -*- coding: utf-8 -*-
 
+import copy
+import torch
+
 import phe
 from phe import paillier
 import numpy as np
@@ -160,6 +163,29 @@ def combineShares(shrs, w, delta, combineSharesConstant, nSPlusOne, n, ns):
         result = (L * combineSharesConstant) % n
         return result - ns if result > (ns // 2) else result
 
+
+def encrypt_torch_state_dict(pub_key, state_dict):
+    encrypted_state_dict = {}
+    state_shape = {}
+    for k in state_dict.keys():
+        encrypted_state_dict[k] = state_dict[k].numpy()
+        state_shape[k] = encrypted_state_dict[k].shape
+        if len(encrypted_state_dict[k].shape) <= 1:
+            encrypted_state_dict[k] = encrypt_vector(pub_key, encrypted_state_dict[k])
+        else:
+            # ravel the high dimension nd array
+            encrypted_state_dict[k] = encrypt_vector(pub_key, encrypted_state_dict[k].ravel())
+    return encrypted_state_dict
+
+
+def decrypt_torch_state_dict(encrypted_state_dict, partial_priv_keys, w, delta, combineSharesConstant, nSPlusOne, n, ns, total_num, state_dict):
+    intermediate_state_dict = copy.deepcopy(encrypted_state_dict)
+    state_shape = {}
+    for k in encrypted_state_dict.keys():
+        state_shape[k] = state_dict[k].shape
+        shares = [decrypt_vector(partial_key, encrypted_state_dict[k]) for partial_key in partial_priv_keys]
+        intermediate_state_dict[k] = torch.from_numpy(np.array(batch_decrypt(shares, w, delta, combineSharesConstant, nSPlusOne, n, ns)).reshape(state_shape[k])/total_num)
+    return intermediate_state_dict
 
 def encrypt_vector(public_key, x):
     return [public_key.encrypt(int(i*BASE_NUM)) for i in x]

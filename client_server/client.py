@@ -56,6 +56,7 @@ if __name__ == '__main__':
 	local_train_idxes = [idx for idx in range(int(train_attributes.shape[0]*(args.rank-1)/args.num_users),int(train_attributes.shape[0]*args.rank/args.num_users))]
 	local_train_loader = clientDataloader(train_attributes, train_labels, local_train_idxes, batchsize=args.local_bs)
 	if args.dp:
+		args.secure_rng = True
 		generator = (prng.create_random_device_generator("/dev/urandom") if args.secure_rng else None)
 		local_train_loader = prngDataloader(train_attributes, train_labels, local_train_idxes, batchsize=args.local_bs, gene=generator)
 
@@ -71,7 +72,6 @@ if __name__ == '__main__':
 				optimizer = get_optimizer(args, tmp_data)
 				loss_func = nn.CrossEntropyLoss()
 				if args.dp:
-					args.secure_rng = True
 					privacy_engine = PrivacyEngine(tmp_data, batch_size=args.bs, sample_size=len(local_train_loader),
 													alphas=[1 + x / 10.0 for x in range(1, 100)] + list(range(12, 64)),
 													noise_multiplier=0.3, max_grad_norm=1.2, secure_rng=args.secure_rng)

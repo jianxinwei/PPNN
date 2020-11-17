@@ -9,8 +9,8 @@ def args_parser():
 	# federated arguments
 	parser.add_argument('--epochs', type=int, default=10, help="rounds of training")
 	# parser.add_argument('--epochs', type=int, default=3, help="rounds of training")
-	# parser.add_argument('--num_users', type=int, default=5, help="number of users: K")
-	parser.add_argument('--num_users', type=int, default=4, help="number of users: K")
+	parser.add_argument('--num_users', type=int, default=5, help="number of users: K")
+	# parser.add_argument('--num_users', type=int, default=3, help="number of users: K")
 	parser.add_argument('--frac', type=float, default=1, help="the fraction of clients: C")
 	parser.add_argument('--local_ep', type=int, default=5, help="the number of local epochs: E")
 	# parser.add_argument('--local_ep', type=int, default=2, help="the number of local epochs: E")
@@ -47,7 +47,7 @@ def args_parser():
 	parser.add_argument('--gpu', type=int, default=-1, help="GPU ID, -1 for CPU")
 	parser.add_argument('--dim_hidden', type=int, default=32, help='hidden layer dimension')
 	parser.add_argument('--n_length', type=int, default=1024, help='Key size in bits, designed for TPHE')
-	parser.add_argument('--num_share', type=int, default=2, help='Minimum number to decrpt ciphertexts, designed for TPHE')
+	parser.add_argument('--num_share', type=int, default=3, help='Minimum number to decrpt ciphertexts, designed for TPHE')
 	
 	parser.add_argument('--train_ratio', type=float, default=0.6)
 	parser.add_argument('--valid_ratio', type=float, default=0.2)
@@ -58,7 +58,7 @@ def args_parser():
 	parser.add_argument('--dp', action='store_true', help='Enable differential privacy')
 	parser.add_argument('--tphe', action='store_true', help='Enable TPHE')
 
-	parser.add_argument('--buffer', type=float, default=10e8)
+	parser.add_argument('--buffer', type=float, default=50e8) # 760586945 * 5
 
 	parser.add_argument('--rank', type=int, default=None)
 
