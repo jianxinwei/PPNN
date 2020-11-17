@@ -34,6 +34,7 @@ if __name__ == '__main__':
 	args = args_parser()
 	args.device = torch.device('cuda:{}'.format(torch.cuda.device_count()-1) if torch.cuda.is_available() and args.gpu != -1 else 'cpu')
 
+	# rank should start from 1, for the server rank id is 0
 	if args.rank == None:
 		sys.exit(1)
 
@@ -54,6 +55,9 @@ if __name__ == '__main__':
 	test_loader = DataLoader(dataset=TensorDataset(test_attributes, test_labels), batch_size=args.bs, shuffle=True)
 	local_train_idxes = [idx for idx in range(int(train_attributes.shape[0]*(args.rank-1)/args.num_users),int(train_attributes.shape[0]*args.rank/args.num_users))]
 	local_train_loader = clientDataloader(train_attributes, train_labels, local_train_idxes, batchsize=args.local_bs)
+	if args.dp:
+		generator = (prng.create_random_device_generator("/dev/urandom") if args.secure_rng else None)
+		local_train_loader = prngDataloader(train_attributes, train_labels, local_train_idxes, batchsize=args.local_bs, gene=generator)
 
 	# load model from server
 	with memory_time_moniter() as mt:
@@ -72,8 +76,6 @@ if __name__ == '__main__':
 													alphas=[1 + x / 10.0 for x in range(1, 100)] + list(range(12, 64)),
 													noise_multiplier=0.3, max_grad_norm=1.2, secure_rng=args.secure_rng)
 					privacy_engine.attach(optimizer)
-					generator = (prng.create_random_device_generator("/dev/urandom") if args.secure_rng else None)
-					local_train_loader = prngDataloader(train_attributes, train_labels, local_train_idxes, batchsize=args.local_bs, gene=generator)
 				current_state_dict, current_loss = normal_train(args, tmp_data, optimizer, loss_func, local_train_loader, valid_loader)
 				server_socket.send(pickle.dumps([current_state_dict, current_loss]))
 	server_socket.close()

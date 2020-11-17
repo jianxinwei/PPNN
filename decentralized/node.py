@@ -47,17 +47,20 @@ def connect(client_rank):
 		except:
 			print("\33[31m\33[1m Can't connect to the node {} \33[0m".format(client_rank))
 
-def get_listen_connect(args):
-	user_list = [idx for idx in range(args.num_users)]
-	client_socket_idx = 0
-	for client_rank in range(args.num_users):
-		if client_rank == args.rank:
-			listen()
-		else:
-			client_sockets_rank2idx[client_rank] = client_socket_idx
-			client_sockets_idx2rank[client_socket_idx] = client_rank
-			connect(client_rank)
-			client_socket_idx += 1
+
+def send_net_to_all(net):
+	for sockfd in server_connection_list:
+		sockfd.send(pickle.dumps(copy.deepcopy(net)))
+
+
+
+def server(cur_net):
+	pass
+
+
+def client():
+	pass
+
 
 if __name__ == '__main__':
 	args = args_parser()
@@ -76,6 +79,10 @@ if __name__ == '__main__':
 	valid_loader = DataLoader(dataset=TensorDataset(valid_attributes, valid_labels), batch_size=args.bs, shuffle=True)
 	test_loader = DataLoader(dataset=TensorDataset(test_attributes, test_labels), batch_size=args.bs, shuffle=True)
 
+	local_train_idxes = [idx for idx in range(int(train_attributes.shape[0]*(args.rank-1)/args.num_users),int(train_attributes.shape[0]*args.rank/args.num_users))]
+	local_train_loader = clientDataloader(train_attributes, train_labels, local_train_idxes, batchsize=args.local_bs)
+
+	# Initialize socket connections
 	ip_port = read_ip_port_json('../ip_port.json')
 	self_ip = ip_port[args.rank]['ip']
 	self_port = ip_port[args.rank]['port']
@@ -97,10 +104,38 @@ if __name__ == '__main__':
 			connect(client_rank)
 			client_socket_idx += 1
 
+	server_flag = False
+	if args.rank == 0:
+		server_flag = True
+
+	# build model
+	if args.gpu != -1:
+		net_glob = MLP(dim_in=attrisize, dim_hidden=args.dim_hidden, dim_out=args.num_classes).to(args.device)
+	else:
+		net_glob = MLP(dim_in=attrisize, dim_hidden=args.dim_hidden, dim_out=args.num_classes)
+	if args.dataset == 'farm':
+		if args.gpu != -1:
+			net_glob = LargeMLP(dim_in=attrisize, args=args, dim_out=args.num_classes).to(args.device)
+		else:
+			net_glob = LargeMLP(dim_in=attrisize, args=args, dim_out=args.num_classes)
+	print(net_glob)
+	# net_glob.train()
+
+	# training
+	loss_train = []
+	loss_valid = []
+	best_valid_loss = np.finfo(float).max
+	best_net_glob = None
+
+	with memory_time_moniter() as mt:
+		for iter in range(args.epochs):
+			if server_flag:
+				server(net_glob)
+			else:
+				client():
 
 	for sockfd in client_sockets:
 		sockfd.close()
 	for sockfd in server_connection_list:
 		sockfd.close()
 	server_socket.close()
-	print('done')

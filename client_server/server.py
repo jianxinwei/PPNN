@@ -61,7 +61,7 @@ if __name__ == '__main__':
 
 	ip_port = read_ip_port_json('../ip_port_client_server.json')
 	server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-	server_socket.bind((ip_port[0]['ip'], ip_port[0]['port'])) # default server, id: 0
+	server_socket.bind((ip_port[0]['ip'], ip_port[0]['port'])) # default server rank id: 0
 	server_socket.listen(10) # listen atmost 10 connection at one time
 	# server_socket.setblocking(True) # blocking mode
 	connected_list = []
