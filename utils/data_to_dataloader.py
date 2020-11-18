@@ -3,6 +3,8 @@ import pandas as pd
 import torch
 from torch.utils.data import DataLoader
 
+import ipdb
+
 # dataframe to tensor
 def dfToTensor(dataset):
     attributes = torch.Tensor(np.array(dataset.iloc[:, :-1].values.astype(np.float32)))
@@ -13,6 +15,7 @@ def dfToTensor(dataset):
 # split the dataset and put each of them in Dataloader
 def clientDataloader(attributes, labels, ids, batchsize=8):
     ids = torch.LongTensor(list(ids))
+    ids = ids.to(attributes.device)
     part_attributes = torch.index_select(attributes, 0, ids)
     part_labels = torch.index_select(labels, 0, ids)
     train_tensor = torch.utils.data.TensorDataset(part_attributes, part_labels)
@@ -21,6 +24,7 @@ def clientDataloader(attributes, labels, ids, batchsize=8):
 
 def prngDataloader(attributes, labels, ids, batchsize=8, gene=None):
     ids = torch.LongTensor(list(ids))
+    ids = ids.to(attributes.device)
     part_attributes = torch.index_select(attributes, 0, ids)
     part_labels = torch.index_select(labels, 0, ids)
     train_tensor = torch.utils.data.TensorDataset(part_attributes, part_labels)
