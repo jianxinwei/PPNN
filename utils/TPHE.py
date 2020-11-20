@@ -168,6 +168,8 @@ def encrypt_torch_state_dict(pub_key, state_dict):
     encrypted_state_dict = {}
     state_shape = {}
     for k in state_dict.keys():
+        if state_dict[k].get_device() >= 0:
+            state_dict[k] = state_dict[k].cpu()
         encrypted_state_dict[k] = state_dict[k].numpy()
         state_shape[k] = encrypted_state_dict[k].shape
         if len(encrypted_state_dict[k].shape) <= 1:
