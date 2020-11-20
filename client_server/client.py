@@ -82,5 +82,7 @@ if __name__ == '__main__':
 													noise_multiplier=0.3, max_grad_norm=1.2, secure_rng=args.secure_rng)
 					privacy_engine.attach(optimizer)
 				current_state_dict, current_loss = normal_train(args, tmp_data, optimizer, loss_func, local_train_loader, valid_loader)
+				if args.dp:
+					privacy_engine.detach()
 				server_socket.send(pickle.dumps([current_state_dict, current_loss]))
 	server_socket.close()

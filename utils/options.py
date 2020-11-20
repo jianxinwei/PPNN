@@ -33,7 +33,7 @@ def args_parser():
 	parser.add_argument("--sigma", type=float, default=1.0, metavar="S", help="Noise multiplier (default 1.0)")
 
 	# other arguments
-	parser.add_argument('--dataset', type=str, default='bank', help="name of dataset")
+	parser.add_argument('--dataset', type=str, default='bidding', help="name of dataset")
 	parser.add_argument('--iid', action='store_true', help='whether i.i.d or not')
 	parser.add_argument('--num_classes', type=int, default=2, help="number of classes")
 	parser.add_argument('--num_channels', type=int, default=3, help="number of channels of imges")
@@ -45,8 +45,9 @@ def args_parser():
 						help='Enable Secure RNG to have trustworthy privacy guarantees. Comes at a performance cost')
 	parser.add_argument('--pb_interval', type=int, default=200, help='Computes the (epsilon, delta) privacy budget spent so far.')
 	parser.add_argument('--gpu', type=int, default=-1, help="GPU ID, -1 for CPU")
-	parser.add_argument('--dim_hidden', type=int, default=32, help='hidden layer dimension')
-	parser.add_argument('--n_length', type=int, default=1024, help='Key size in bits, designed for TPHE')
+	# parser.add_argument('--dim_hidden', type=int, default=32, help='hidden layer dimension')
+	parser.add_argument('--dim_hidden', type=int, default=8, help='hidden layer dimension')
+	parser.add_argument('--n_length', type=int, default=256, help='Key size in bits, designed for TPHE')
 	parser.add_argument('--num_share', type=int, default=3, help='Minimum number to decrpt ciphertexts, designed for TPHE')
 	
 	parser.add_argument('--train_ratio', type=float, default=0.6)

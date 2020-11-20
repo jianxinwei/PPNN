@@ -34,19 +34,20 @@ if __name__ == '__main__':
     args = args_parser()
     args.device = torch.device('cuda:{}'.format(torch.cuda.device_count()-1) if torch.cuda.is_available() and args.gpu != -1 else 'cpu')
 
-    save_prefix = '../save/{}_{}_{}_{}_local'.format(args.dataset, args.model, args.optim, args.epochs)
+    save_prefix = '../save/{}_{}_{}_{}_local_client'.format(args.dataset, args.model, args.optim, args.epochs)
 
     if args.dp:
         save_prefix = save_prefix + '_dp'
     if args.tphe:
         save_prefix = save_prefix + '_tphe'
 
-    train_attributes, train_labels, valid_attributes, valid_labels, test_attributes, test_labels = data_loading(args) 
+    train_attributes, train_labels, valid_attributes, valid_labels, test_attributes, test_labels = data_loading(args)
     attrisize = list(train_attributes[0].size())[0]
     train_loader = DataLoader(dataset=TensorDataset(train_attributes, train_labels), batch_size=args.bs, shuffle=True)
     valid_loader = DataLoader(dataset=TensorDataset(valid_attributes, valid_labels), batch_size=args.bs, shuffle=True)
     test_loader = DataLoader(dataset=TensorDataset(test_attributes, test_labels), batch_size=args.bs, shuffle=True)
-
+    local_train_idxes = [idx for idx in range(0,int(train_attributes.shape[0]/args.num_users))]
+    train_loader = clientDataloader(train_attributes, train_labels, local_train_idxes, batchsize=args.local_bs)
     # build model
     if args.gpu != -1:
         net_glob = MLP(dim_in=attrisize, dim_hidden=args.dim_hidden, dim_out=args.num_classes).to(args.device)

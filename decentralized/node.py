@@ -111,12 +111,14 @@ def server(cur_net, current_iter, current_server_rank_id, best_valid_loss, best_
 	optimizer = get_optimizer(args, cur_net)
 	loss_func = nn.CrossEntropyLoss()
 	if args.dp:
-		if not hasattr(cur_net, "autograd_grad_sample_hooks"):
-			privacy_engine = PrivacyEngine(cur_net, batch_size=args.bs, sample_size=len(local_train_loader),
-											alphas=[1 + x / 10.0 for x in range(1, 100)] + list(range(12, 64)),
-											noise_multiplier=0.3, max_grad_norm=1.2, secure_rng=args.secure_rng)
-			privacy_engine.attach(optimizer)
+		privacy_engine = PrivacyEngine(cur_net, batch_size=args.bs, sample_size=len(local_train_loader),
+										alphas=[1 + x / 10.0 for x in range(1, 100)] + list(range(12, 64)),
+										noise_multiplier=0.3, max_grad_norm=1.2, secure_rng=args.secure_rng)
+		privacy_engine.attach(optimizer)
 	current_state_dict, current_loss = normal_train(args, cur_net, optimizer, loss_func, local_train_loader, valid_loader)
+
+	if args.dp:
+		privacy_engine.detach()
 
 	loss_locals.append(current_loss)
 	if args.tphe:
@@ -180,12 +182,14 @@ def client(cur_net, current_iter, current_server_rank_id, best_valid_loss, best_
 	optimizer = get_optimizer(args, cur_net)
 	loss_func = nn.CrossEntropyLoss()
 	if args.dp:
-		if not hasattr(cur_net, "autograd_grad_sample_hooks"):
-			privacy_engine = PrivacyEngine(cur_net, batch_size=args.bs, sample_size=len(local_train_loader),
-											alphas=[1 + x / 10.0 for x in range(1, 100)] + list(range(12, 64)),
-											noise_multiplier=0.3, max_grad_norm=1.2, secure_rng=args.secure_rng)
-			privacy_engine.attach(optimizer)
+		privacy_engine = PrivacyEngine(cur_net, batch_size=args.bs, sample_size=len(local_train_loader),
+										alphas=[1 + x / 10.0 for x in range(1, 100)] + list(range(12, 64)),
+										noise_multiplier=0.3, max_grad_norm=1.2, secure_rng=args.secure_rng)
+		privacy_engine.attach(optimizer)
 	current_state_dict, current_loss = normal_train(args, cur_net, optimizer, loss_func, local_train_loader, valid_loader)
+
+	if args.dp:
+		privacy_engine.detach()
 
 	# send the state_dict to current server
 	if args.tphe:
@@ -292,7 +296,7 @@ if __name__ == '__main__':
 		if args.dp:
 			json_path = '../json/decentralized_{}_{}_dp_tphe.json'.format(args.dataset, args.optim.lower())
 	ip_port = read_ip_port_json(json_path)
-	print(ip_port)
+	# print(ip_port)
 
 	self_ip = ip_port[args.rank]['ip']
 	self_port = ip_port[args.rank]['port']

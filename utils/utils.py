@@ -122,7 +122,11 @@ def normal_train(args, net, optimizer, loss_func, ldr_train, ldr_valid):
                 log_probs = net(attributes)
                 loss = loss_func(log_probs, labels)
                 loss.backward()
+
+                # print(len(attributes), len(labels), len(loss))
+
                 optimizer.step()
+
                 # if args.verbose and batch_idx % 10 == 0:
                 #     print('Update Epoch: {} [{}/{} ({:.0f}%)]\tLoss: {:.6f}'.format(
                 #         iter, batch_idx * len(attributes), len(ldr_train.dataset),
