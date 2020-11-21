@@ -1,0 +1,246 @@
+MLP(
+  (layer_input): Linear(in_features=11, out_features=32, bias=True)
+  (dropout): Dropout(p=0.5, inplace=False)
+  (relu): ReLU()
+  (layer_hidden1): Linear(in_features=32, out_features=2, bias=True)
+)
+Round  0, Average loss 0.447
+Round  0, Validation loss 0.319
+SAVE BEST MODEL AT EPOCH 0
+Round  1, Average loss 0.317
+Round  1, Validation loss 0.319
+Round  2, Average loss 0.317
+Round  2, Validation loss 0.325
+Round  3, Average loss 0.315
+Round  3, Validation loss 0.323
+Round  4, Average loss 0.315
+Round  4, Validation loss 0.316
+SAVE BEST MODEL AT EPOCH 4
+Round  5, Average loss 0.305
+Round  5, Validation loss 0.306
+SAVE BEST MODEL AT EPOCH 5
+Round  6, Average loss 0.289
+Round  6, Validation loss 0.292
+SAVE BEST MODEL AT EPOCH 6
+Round  7, Average loss 0.279
+Round  7, Validation loss 0.278
+SAVE BEST MODEL AT EPOCH 7
+Round  8, Average loss 0.267
+Round  8, Validation loss 0.263
+SAVE BEST MODEL AT EPOCH 8
+Round  9, Average loss 0.245
+Round  9, Validation loss 0.244
+SAVE BEST MODEL AT EPOCH 9
+Round 10, Average loss 0.235
+Round 10, Validation loss 0.230
+SAVE BEST MODEL AT EPOCH 10
+Round 11, Average loss 0.218
+Round 11, Validation loss 0.216
+SAVE BEST MODEL AT EPOCH 11
+Round 12, Average loss 0.207
+Round 12, Validation loss 0.202
+SAVE BEST MODEL AT EPOCH 12
+Round 13, Average loss 0.192
+Round 13, Validation loss 0.187
+SAVE BEST MODEL AT EPOCH 13
+Round 14, Average loss 0.188
+Round 14, Validation loss 0.174
+SAVE BEST MODEL AT EPOCH 14
+Round 15, Average loss 0.168
+Round 15, Validation loss 0.159
+SAVE BEST MODEL AT EPOCH 15
+Round 16, Average loss 0.156
+Round 16, Validation loss 0.147
+SAVE BEST MODEL AT EPOCH 16
+Round 17, Average loss 0.147
+Round 17, Validation loss 0.133
+SAVE BEST MODEL AT EPOCH 17
+Round 18, Average loss 0.139
+Round 18, Validation loss 0.123
+SAVE BEST MODEL AT EPOCH 18
+Round 19, Average loss 0.131
+Round 19, Validation loss 0.114
+SAVE BEST MODEL AT EPOCH 19
+Round 20, Average loss 0.118
+Round 20, Validation loss 0.103
+SAVE BEST MODEL AT EPOCH 20
+Round 21, Average loss 0.117
+Round 21, Validation loss 0.094
+SAVE BEST MODEL AT EPOCH 21
+Round 22, Average loss 0.107
+Round 22, Validation loss 0.086
+SAVE BEST MODEL AT EPOCH 22
+Round 23, Average loss 0.098
+Round 23, Validation loss 0.078
+SAVE BEST MODEL AT EPOCH 23
+Round 24, Average loss 0.098
+Round 24, Validation loss 0.072
+SAVE BEST MODEL AT EPOCH 24
+Round 25, Average loss 0.085
+Round 25, Validation loss 0.067
+SAVE BEST MODEL AT EPOCH 25
+Round 26, Average loss 0.086
+Round 26, Validation loss 0.063
+SAVE BEST MODEL AT EPOCH 26
+Round 27, Average loss 0.085
+Round 27, Validation loss 0.059
+SAVE BEST MODEL AT EPOCH 27
+Round 28, Average loss 0.080
+Round 28, Validation loss 0.056
+SAVE BEST MODEL AT EPOCH 28
+Round 29, Average loss 0.080
+Round 29, Validation loss 0.054
+SAVE BEST MODEL AT EPOCH 29
+Round 30, Average loss 0.082
+Round 30, Validation loss 0.053
+SAVE BEST MODEL AT EPOCH 30
+Round 31, Average loss 0.072
+Round 31, Validation loss 0.051
+SAVE BEST MODEL AT EPOCH 31
+Round 32, Average loss 0.078
+Round 32, Validation loss 0.050
+SAVE BEST MODEL AT EPOCH 32
+Round 33, Average loss 0.075
+Round 33, Validation loss 0.049
+SAVE BEST MODEL AT EPOCH 33
+Round 34, Average loss 0.072
+Round 34, Validation loss 0.049
+SAVE BEST MODEL AT EPOCH 34
+Round 35, Average loss 0.071
+Round 35, Validation loss 0.048
+SAVE BEST MODEL AT EPOCH 35
+Round 36, Average loss 0.069
+Round 36, Validation loss 0.048
+SAVE BEST MODEL AT EPOCH 36
+Round 37, Average loss 0.066
+Round 37, Validation loss 0.048
+SAVE BEST MODEL AT EPOCH 37
+Round 38, Average loss 0.068
+Round 38, Validation loss 0.048
+Round 39, Average loss 0.076
+Round 39, Validation loss 0.048
+Round 40, Average loss 0.064
+Round 40, Validation loss 0.049
+Round 41, Average loss 0.073
+Round 41, Validation loss 0.049
+Round 42, Average loss 0.069
+Round 42, Validation loss 0.049
+Round 43, Average loss 0.064
+Round 43, Validation loss 0.049
+Round 44, Average loss 0.070
+Round 44, Validation loss 0.049
+Round 45, Average loss 0.069
+Round 45, Validation loss 0.050
+Round 46, Average loss 0.071
+Round 46, Validation loss 0.049
+Round 47, Average loss 0.065
+Round 47, Validation loss 0.049
+Round 48, Average loss 0.065
+Round 48, Validation loss 0.050
+Round 49, Average loss 0.070
+Round 49, Validation loss 0.050
+Round 50, Average loss 0.071
+Round 50, Validation loss 0.050
+Round 51, Average loss 0.063
+Round 51, Validation loss 0.051
+Round 52, Average loss 0.071
+Round 52, Validation loss 0.051
+Round 53, Average loss 0.064
+Round 53, Validation loss 0.051
+Round 54, Average loss 0.072
+Round 54, Validation loss 0.052
+Round 55, Average loss 0.067
+Round 55, Validation loss 0.052
+Round 56, Average loss 0.065
+Round 56, Validation loss 0.052
+Round 57, Average loss 0.067
+Round 57, Validation loss 0.052
+Round 58, Average loss 0.064
+Round 58, Validation loss 0.052
+Round 59, Average loss 0.062
+Round 59, Validation loss 0.052
+Round 60, Average loss 0.067
+Round 60, Validation loss 0.052
+Round 61, Average loss 0.062
+Round 61, Validation loss 0.052
+Round 62, Average loss 0.071
+Round 62, Validation loss 0.053
+Round 63, Average loss 0.074
+Round 63, Validation loss 0.053
+Round 64, Average loss 0.062
+Round 64, Validation loss 0.054
+Round 65, Average loss 0.060
+Round 65, Validation loss 0.054
+Round 66, Average loss 0.072
+Round 66, Validation loss 0.055
+Round 67, Average loss 0.069
+Round 67, Validation loss 0.055
+Round 68, Average loss 0.069
+Round 68, Validation loss 0.056
+Round 69, Average loss 0.074
+Round 69, Validation loss 0.056
+Round 70, Average loss 0.068
+Round 70, Validation loss 0.056
+Round 71, Average loss 0.069
+Round 71, Validation loss 0.055
+Round 72, Average loss 0.061
+Round 72, Validation loss 0.056
+Round 73, Average loss 0.067
+Round 73, Validation loss 0.055
+Round 74, Average loss 0.073
+Round 74, Validation loss 0.056
+Round 75, Average loss 0.074
+Round 75, Validation loss 0.056
+Round 76, Average loss 0.069
+Round 76, Validation loss 0.056
+Round 77, Average loss 0.064
+Round 77, Validation loss 0.057
+Round 78, Average loss 0.067
+Round 78, Validation loss 0.057
+Round 79, Average loss 0.064
+Round 79, Validation loss 0.057
+Round 80, Average loss 0.067
+Round 80, Validation loss 0.057
+Round 81, Average loss 0.066
+Round 81, Validation loss 0.057
+Round 82, Average loss 0.074
+Round 82, Validation loss 0.057
+Round 83, Average loss 0.065
+Round 83, Validation loss 0.057
+Round 84, Average loss 0.069
+Round 84, Validation loss 0.057
+Round 85, Average loss 0.073
+Round 85, Validation loss 0.057
+Round 86, Average loss 0.071
+Round 86, Validation loss 0.057
+Round 87, Average loss 0.069
+Round 87, Validation loss 0.057
+Round 88, Average loss 0.067
+Round 88, Validation loss 0.058
+Round 89, Average loss 0.067
+Round 89, Validation loss 0.057
+Round 90, Average loss 0.064
+Round 90, Validation loss 0.056
+Round 91, Average loss 0.056
+Round 91, Validation loss 0.057
+Round 92, Average loss 0.065
+Round 92, Validation loss 0.057
+Round 93, Average loss 0.069
+Round 93, Validation loss 0.056
+Round 94, Average loss 0.063
+Round 94, Validation loss 0.057
+Round 95, Average loss 0.066
+Round 95, Validation loss 0.057
+Round 96, Average loss 0.064
+Round 96, Validation loss 0.057
+Round 97, Average loss 0.067
+Round 97, Validation loss 0.056
+Round 98, Average loss 0.072
+Round 98, Validation loss 0.057
+Round 99, Average loss 0.065
+Round 99, Validation loss 0.057
+[elapsed time: 79.1865730 s]
+[took memory: 2.8554688 Mb]
+Training accuracy: 98.13 Training loss: 0.05
+Validating accuracy: 98.02 Validating loss: 0.05
+Testing accuracy: 97.63 Testing loss: 0.06

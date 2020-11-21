@@ -11,7 +11,7 @@ class MLP(nn.Module):
     def __init__(self, dim_in, dim_hidden, dim_out):
         super(MLP, self).__init__()
         self.layer_input = nn.Linear(dim_in, dim_hidden)
-        self.dropout = nn.Dropout()
+        self.dropout = nn.Dropout(p=0.2)
         self.relu = nn.ReLU()
         self.layer_hidden1 = nn.Linear(dim_hidden, dim_out)
 

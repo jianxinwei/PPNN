@@ -1,0 +1,430 @@
+{0: {'ip': '127.0.0.1', 'port': 57011}, 1: {'ip': '127.0.0.1', 'port': 57012}, 2: {'ip': '127.0.0.1', 'port': 57013}, 3: {'ip': '127.0.0.1', 'port': 57014}, 4: {'ip': '127.0.0.1', 'port': 57015}}
+MLP(
+  (layer_input): Linear(in_features=35, out_features=32, bias=True)
+  (dropout): Dropout(p=0.5, inplace=False)
+  (relu): ReLU()
+  (layer_hidden1): Linear(in_features=32, out_features=2, bias=True)
+)
+Round  0, Average loss 0.396
+Round  0, Validation loss 0.355
+SAVE BEST MODEL AT EPOCH 0
+[31m[1m Current server rank id 1 [0m
+Round  1, Average loss 0.355
+Round  1, Validation loss 0.349
+SAVE BEST MODEL AT EPOCH 1
+[31m[1m Current server rank id 2 [0m
+Round  2, Average loss 0.349
+Round  2, Validation loss 0.346
+SAVE BEST MODEL AT EPOCH 2
+[31m[1m Current server rank id 3 [0m
+Round  3, Average loss 0.345
+Round  3, Validation loss 0.342
+SAVE BEST MODEL AT EPOCH 3
+[31m[1m Current server rank id 0 [0m
+Round  4, Average loss 0.341
+Round  4, Validation loss 0.338
+SAVE BEST MODEL AT EPOCH 4
+[31m[1m Current server rank id 4 [0m
+Round  5, Average loss 0.339
+Round  5, Validation loss 0.336
+SAVE BEST MODEL AT EPOCH 5
+[31m[1m Current server rank id 1 [0m
+Round  6, Average loss 0.336
+Round  6, Validation loss 0.335
+SAVE BEST MODEL AT EPOCH 6
+[31m[1m Current server rank id 4 [0m
+Round  7, Average loss 0.335
+Round  7, Validation loss 0.332
+SAVE BEST MODEL AT EPOCH 7
+[31m[1m Current server rank id 4 [0m
+Round  8, Average loss 0.333
+Round  8, Validation loss 0.331
+SAVE BEST MODEL AT EPOCH 8
+[31m[1m Current server rank id 0 [0m
+Round  9, Average loss 0.331
+Round  9, Validation loss 0.327
+SAVE BEST MODEL AT EPOCH 9
+[31m[1m Current server rank id 4 [0m
+Round 10, Average loss 0.329
+Round 10, Validation loss 0.328
+[31m[1m Current server rank id 1 [0m
+Round 11, Average loss 0.328
+Round 11, Validation loss 0.328
+[31m[1m Current server rank id 0 [0m
+Round 12, Average loss 0.327
+Round 12, Validation loss 0.323
+SAVE BEST MODEL AT EPOCH 12
+[31m[1m Current server rank id 4 [0m
+Round 13, Average loss 0.326
+Round 13, Validation loss 0.324
+[31m[1m Current server rank id 0 [0m
+Round 14, Average loss 0.324
+Round 14, Validation loss 0.321
+SAVE BEST MODEL AT EPOCH 14
+[31m[1m Current server rank id 2 [0m
+Round 15, Average loss 0.322
+Round 15, Validation loss 0.322
+[31m[1m Current server rank id 2 [0m
+Round 16, Average loss 0.321
+Round 16, Validation loss 0.320
+SAVE BEST MODEL AT EPOCH 16
+[31m[1m Current server rank id 2 [0m
+Round 17, Average loss 0.321
+Round 17, Validation loss 0.320
+SAVE BEST MODEL AT EPOCH 17
+[31m[1m Current server rank id 3 [0m
+Round 18, Average loss 0.320
+Round 18, Validation loss 0.320
+SAVE BEST MODEL AT EPOCH 18
+[31m[1m Current server rank id 1 [0m
+Round 19, Average loss 0.320
+Round 19, Validation loss 0.319
+SAVE BEST MODEL AT EPOCH 19
+[31m[1m Current server rank id 2 [0m
+Round 20, Average loss 0.318
+Round 20, Validation loss 0.317
+SAVE BEST MODEL AT EPOCH 20
+[31m[1m Current server rank id 3 [0m
+Round 21, Average loss 0.318
+Round 21, Validation loss 0.317
+SAVE BEST MODEL AT EPOCH 21
+[31m[1m Current server rank id 2 [0m
+Round 22, Average loss 0.318
+Round 22, Validation loss 0.315
+SAVE BEST MODEL AT EPOCH 22
+[31m[1m Current server rank id 2 [0m
+Round 23, Average loss 0.316
+Round 23, Validation loss 0.315
+SAVE BEST MODEL AT EPOCH 23
+[31m[1m Current server rank id 1 [0m
+Round 24, Average loss 0.316
+Round 24, Validation loss 0.316
+[31m[1m Current server rank id 0 [0m
+Round 25, Average loss 0.315
+Round 25, Validation loss 0.313
+SAVE BEST MODEL AT EPOCH 25
+[31m[1m Current server rank id 2 [0m
+Round 26, Average loss 0.315
+Round 26, Validation loss 0.313
+SAVE BEST MODEL AT EPOCH 26
+[31m[1m Current server rank id 1 [0m
+Round 27, Average loss 0.315
+Round 27, Validation loss 0.314
+[31m[1m Current server rank id 2 [0m
+Round 28, Average loss 0.313
+Round 28, Validation loss 0.311
+SAVE BEST MODEL AT EPOCH 28
+[31m[1m Current server rank id 4 [0m
+Round 29, Average loss 0.313
+Round 29, Validation loss 0.313
+[31m[1m Current server rank id 4 [0m
+Round 30, Average loss 0.312
+Round 30, Validation loss 0.313
+[31m[1m Current server rank id 0 [0m
+Round 31, Average loss 0.311
+Round 31, Validation loss 0.309
+SAVE BEST MODEL AT EPOCH 31
+[31m[1m Current server rank id 2 [0m
+Round 32, Average loss 0.311
+Round 32, Validation loss 0.309
+SAVE BEST MODEL AT EPOCH 32
+[31m[1m Current server rank id 3 [0m
+Round 33, Average loss 0.310
+Round 33, Validation loss 0.311
+[31m[1m Current server rank id 0 [0m
+Round 34, Average loss 0.309
+Round 34, Validation loss 0.307
+SAVE BEST MODEL AT EPOCH 34
+[31m[1m Current server rank id 2 [0m
+Round 35, Average loss 0.307
+Round 35, Validation loss 0.306
+SAVE BEST MODEL AT EPOCH 35
+[31m[1m Current server rank id 1 [0m
+Round 36, Average loss 0.307
+Round 36, Validation loss 0.307
+[31m[1m Current server rank id 1 [0m
+Round 37, Average loss 0.306
+Round 37, Validation loss 0.306
+SAVE BEST MODEL AT EPOCH 37
+[31m[1m Current server rank id 0 [0m
+Round 38, Average loss 0.307
+Round 38, Validation loss 0.303
+SAVE BEST MODEL AT EPOCH 38
+[31m[1m Current server rank id 1 [0m
+Round 39, Average loss 0.305
+Round 39, Validation loss 0.304
+[31m[1m Current server rank id 0 [0m
+Round 40, Average loss 0.304
+Round 40, Validation loss 0.303
+SAVE BEST MODEL AT EPOCH 40
+[31m[1m Current server rank id 0 [0m
+Round 41, Average loss 0.304
+Round 41, Validation loss 0.301
+SAVE BEST MODEL AT EPOCH 41
+[31m[1m Current server rank id 0 [0m
+Round 42, Average loss 0.302
+Round 42, Validation loss 0.300
+SAVE BEST MODEL AT EPOCH 42
+[31m[1m Current server rank id 2 [0m
+Round 43, Average loss 0.301
+Round 43, Validation loss 0.298
+SAVE BEST MODEL AT EPOCH 43
+[31m[1m Current server rank id 1 [0m
+Round 44, Average loss 0.301
+Round 44, Validation loss 0.299
+[31m[1m Current server rank id 3 [0m
+Round 45, Average loss 0.300
+Round 45, Validation loss 0.300
+[31m[1m Current server rank id 1 [0m
+Round 46, Average loss 0.299
+Round 46, Validation loss 0.298
+SAVE BEST MODEL AT EPOCH 46
+[31m[1m Current server rank id 1 [0m
+Round 47, Average loss 0.297
+Round 47, Validation loss 0.297
+SAVE BEST MODEL AT EPOCH 47
+[31m[1m Current server rank id 3 [0m
+Round 48, Average loss 0.297
+Round 48, Validation loss 0.296
+SAVE BEST MODEL AT EPOCH 48
+[31m[1m Current server rank id 4 [0m
+Round 49, Average loss 0.296
+Round 49, Validation loss 0.299
+[31m[1m Current server rank id 4 [0m
+Round 50, Average loss 0.294
+Round 50, Validation loss 0.298
+[31m[1m Current server rank id 3 [0m
+Round 51, Average loss 0.295
+Round 51, Validation loss 0.294
+SAVE BEST MODEL AT EPOCH 51
+[31m[1m Current server rank id 1 [0m
+Round 52, Average loss 0.293
+Round 52, Validation loss 0.292
+SAVE BEST MODEL AT EPOCH 52
+[31m[1m Current server rank id 2 [0m
+Round 53, Average loss 0.292
+Round 53, Validation loss 0.287
+SAVE BEST MODEL AT EPOCH 53
+[31m[1m Current server rank id 1 [0m
+Round 54, Average loss 0.291
+Round 54, Validation loss 0.288
+[31m[1m Current server rank id 4 [0m
+Round 55, Average loss 0.289
+Round 55, Validation loss 0.294
+[31m[1m Current server rank id 4 [0m
+Round 56, Average loss 0.289
+Round 56, Validation loss 0.293
+[31m[1m Current server rank id 2 [0m
+Round 57, Average loss 0.289
+Round 57, Validation loss 0.283
+SAVE BEST MODEL AT EPOCH 57
+[31m[1m Current server rank id 1 [0m
+Round 58, Average loss 0.287
+Round 58, Validation loss 0.284
+[31m[1m Current server rank id 2 [0m
+Round 59, Average loss 0.286
+Round 59, Validation loss 0.282
+SAVE BEST MODEL AT EPOCH 59
+[31m[1m Current server rank id 4 [0m
+Round 60, Average loss 0.284
+Round 60, Validation loss 0.287
+[31m[1m Current server rank id 2 [0m
+Round 61, Average loss 0.283
+Round 61, Validation loss 0.281
+SAVE BEST MODEL AT EPOCH 61
+[31m[1m Current server rank id 3 [0m
+Round 62, Average loss 0.283
+Round 62, Validation loss 0.281
+[31m[1m Current server rank id 4 [0m
+Round 63, Average loss 0.282
+Round 63, Validation loss 0.285
+[31m[1m Current server rank id 3 [0m
+Round 64, Average loss 0.281
+Round 64, Validation loss 0.279
+SAVE BEST MODEL AT EPOCH 64
+[31m[1m Current server rank id 3 [0m
+Round 65, Average loss 0.280
+Round 65, Validation loss 0.281
+[31m[1m Current server rank id 0 [0m
+Round 66, Average loss 0.280
+Round 66, Validation loss 0.276
+SAVE BEST MODEL AT EPOCH 66
+[31m[1m Current server rank id 3 [0m
+Round 67, Average loss 0.278
+Round 67, Validation loss 0.277
+[31m[1m Current server rank id 0 [0m
+Round 68, Average loss 0.276
+Round 68, Validation loss 0.273
+SAVE BEST MODEL AT EPOCH 68
+[31m[1m Current server rank id 2 [0m
+Round 69, Average loss 0.276
+Round 69, Validation loss 0.271
+SAVE BEST MODEL AT EPOCH 69
+[31m[1m Current server rank id 0 [0m
+Round 70, Average loss 0.275
+Round 70, Validation loss 0.272
+[31m[1m Current server rank id 1 [0m
+Round 71, Average loss 0.275
+Round 71, Validation loss 0.271
+[31m[1m Current server rank id 1 [0m
+Round 72, Average loss 0.275
+Round 72, Validation loss 0.271
+SAVE BEST MODEL AT EPOCH 72
+[31m[1m Current server rank id 0 [0m
+Round 73, Average loss 0.274
+Round 73, Validation loss 0.269
+SAVE BEST MODEL AT EPOCH 73
+[31m[1m Current server rank id 2 [0m
+Round 74, Average loss 0.272
+Round 74, Validation loss 0.266
+SAVE BEST MODEL AT EPOCH 74
+[31m[1m Current server rank id 3 [0m
+Round 75, Average loss 0.272
+Round 75, Validation loss 0.269
+[31m[1m Current server rank id 4 [0m
+Round 76, Average loss 0.271
+Round 76, Validation loss 0.272
+[31m[1m Current server rank id 0 [0m
+Round 77, Average loss 0.270
+Round 77, Validation loss 0.266
+SAVE BEST MODEL AT EPOCH 77
+[31m[1m Current server rank id 1 [0m
+Round 78, Average loss 0.270
+Round 78, Validation loss 0.267
+[31m[1m Current server rank id 3 [0m
+Round 79, Average loss 0.268
+Round 79, Validation loss 0.266
+[31m[1m Current server rank id 3 [0m
+Round 80, Average loss 0.269
+Round 80, Validation loss 0.267
+[31m[1m Current server rank id 3 [0m
+Round 81, Average loss 0.268
+Round 81, Validation loss 0.266
+SAVE BEST MODEL AT EPOCH 81
+[31m[1m Current server rank id 2 [0m
+Round 82, Average loss 0.267
+Round 82, Validation loss 0.258
+SAVE BEST MODEL AT EPOCH 82
+[31m[1m Current server rank id 0 [0m
+Round 83, Average loss 0.266
+Round 83, Validation loss 0.261
+[31m[1m Current server rank id 2 [0m
+Round 84, Average loss 0.266
+Round 84, Validation loss 0.260
+[31m[1m Current server rank id 3 [0m
+Round 85, Average loss 0.269
+Round 85, Validation loss 0.263
+[31m[1m Current server rank id 4 [0m
+Round 86, Average loss 0.265
+Round 86, Validation loss 0.266
+[31m[1m Current server rank id 4 [0m
+Round 87, Average loss 0.265
+Round 87, Validation loss 0.269
+[31m[1m Current server rank id 4 [0m
+Round 88, Average loss 0.264
+Round 88, Validation loss 0.266
+[31m[1m Current server rank id 0 [0m
+Round 89, Average loss 0.265
+Round 89, Validation loss 0.257
+SAVE BEST MODEL AT EPOCH 89
+[31m[1m Current server rank id 4 [0m
+Round 90, Average loss 0.263
+Round 90, Validation loss 0.263
+[31m[1m Current server rank id 3 [0m
+Round 91, Average loss 0.262
+Round 91, Validation loss 0.259
+[31m[1m Current server rank id 2 [0m
+Round 92, Average loss 0.261
+Round 92, Validation loss 0.255
+SAVE BEST MODEL AT EPOCH 92
+[31m[1m Current server rank id 2 [0m
+Round 93, Average loss 0.263
+Round 93, Validation loss 0.254
+SAVE BEST MODEL AT EPOCH 93
+[31m[1m Current server rank id 4 [0m
+Round 94, Average loss 0.263
+Round 94, Validation loss 0.262
+[31m[1m Current server rank id 4 [0m
+Round 95, Average loss 0.262
+Round 95, Validation loss 0.262
+[31m[1m Current server rank id 2 [0m
+Round 96, Average loss 0.261
+Round 96, Validation loss 0.254
+SAVE BEST MODEL AT EPOCH 96
+[31m[1m Current server rank id 2 [0m
+Round 97, Average loss 0.261
+Round 97, Validation loss 0.256
+[31m[1m Current server rank id 4 [0m
+Round 98, Average loss 0.261
+Round 98, Validation loss 0.265
+[31m[1m Current server rank id 0 [0m
+Round 99, Average loss 0.259
+Round 99, Validation loss 0.254
+[31m[1m Current server rank id 1 [0m
+Round100, Average loss 0.260
+Round100, Validation loss 0.258
+[31m[1m Current server rank id 2 [0m
+Round101, Average loss 0.259
+Round101, Validation loss 0.252
+SAVE BEST MODEL AT EPOCH 101
+[31m[1m Current server rank id 4 [0m
+Round102, Average loss 0.260
+Round102, Validation loss 0.258
+[31m[1m Current server rank id 4 [0m
+Round103, Average loss 0.259
+Round103, Validation loss 0.261
+[31m[1m Current server rank id 3 [0m
+Round104, Average loss 0.260
+Round104, Validation loss 0.254
+[31m[1m Current server rank id 4 [0m
+Round105, Average loss 0.259
+Round105, Validation loss 0.261
+[31m[1m Current server rank id 4 [0m
+Round106, Average loss 0.259
+Round106, Validation loss 0.258
+[31m[1m Current server rank id 2 [0m
+Round107, Average loss 0.258
+Round107, Validation loss 0.249
+SAVE BEST MODEL AT EPOCH 107
+[31m[1m Current server rank id 1 [0m
+Round108, Average loss 0.258
+Round108, Validation loss 0.259
+[31m[1m Current server rank id 4 [0m
+Round109, Average loss 0.258
+Round109, Validation loss 0.259
+[31m[1m Current server rank id 2 [0m
+Round110, Average loss 0.258
+Round110, Validation loss 0.257
+[31m[1m Current server rank id 4 [0m
+Round111, Average loss 0.256
+Round111, Validation loss 0.258
+[31m[1m Current server rank id 4 [0m
+Round112, Average loss 0.257
+Round112, Validation loss 0.259
+[31m[1m Current server rank id 1 [0m
+Round113, Average loss 0.256
+Round113, Validation loss 0.255
+[31m[1m Current server rank id 3 [0m
+Round114, Average loss 0.256
+Round114, Validation loss 0.256
+[31m[1m Current server rank id 0 [0m
+Round115, Average loss 0.256
+Round115, Validation loss 0.251
+[31m[1m Current server rank id 0 [0m
+Round116, Average loss 0.254
+Round116, Validation loss 0.256
+[31m[1m Current server rank id 2 [0m
+Round117, Average loss 0.254
+Round117, Validation loss 0.249
+[31m[1m Current server rank id 1 [0m
+Round118, Average loss 0.256
+Round118, Validation loss 0.252
+[31m[1m Current server rank id 4 [0m
+Round119, Average loss 0.254
+Round119, Validation loss 0.259
+[31m[1m Current server rank id 1 [0m
+[elapsed time: 703.7617504 s]
+[took memory: 11.0937500 Mb]
+Training accuracy: 89.40 Training loss: 0.25
+Validating accuracy: 89.42 Validating loss: 0.26
+Testing accuracy: 89.53 Testing loss: 0.25
