@@ -149,7 +149,7 @@ If a user runs the default scripts we have provided, some addtional logs will be
   directory. We suggest users to refer to these logs to for an overview of  the overall training trend. 
 
 ### Further Support
-If you have any enquiries, please don't hesitate to contach huangwentao@u.nus.edu (Huang Wentao) or jianxinwei@u.nus.edu (Wei Jianxin) for the further support, thank you.
+If you have any enquiries, please don't hesitate to contact huangwentao@u.nus.edu (Huang Wentao) or jianxinwei@u.nus.edu (Wei Jianxin) for the further support, thank you.
 
 
 
