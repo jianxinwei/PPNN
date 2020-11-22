@@ -29,16 +29,11 @@ ipdb
 ## Installation
 We suggest to set up the environments by anaconda3 or miniconda3.
 To install the required libraries, just run
-```
-pip install -r requirements.txt
-```.
+```pip install -r requirements.txt```.
 
 ## Dataset
 We provide four datasets in this repo: Bank, Bank\_Rnd, Bidding, and Credit. You can easily specify the dataset by setting up the
-
-```
---dataset
-```
+```--dataset```
 argument when running the program.
 Besides, we also provide foyr optimizers: SGD, Adam, Novograd, and Adafactor, where Adam, Novograd and Adafactor are adaptive optimizers, and Adafactor suuports parameter matrix factorization, which can save a lot memory during training.
 One can easily use any of them by specifying 
