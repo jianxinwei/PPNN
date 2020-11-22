@@ -59,11 +59,11 @@ if __name__ == '__main__':
 	valid_loader = DataLoader(dataset=TensorDataset(valid_attributes, valid_labels), batch_size=args.bs, shuffle=True)
 	test_loader = DataLoader(dataset=TensorDataset(test_attributes, test_labels), batch_size=args.bs, shuffle=True)
 
-	# ip_port = read_ip_port_json('../ip_port_client_server.json')
-	json_path = '../json/client_server_{}_{}.json'.format(args.dataset, args.optim.lower())
-	if args.dp:
-		json_path = '../json/client_server_{}_{}_dp.json'.format(args.dataset, args.optim.lower())
-	ip_port = read_ip_port_json(json_path)
+	ip_port = read_ip_port_json('../ip_port_client_server.json')
+	# json_path = '../json/client_server_{}_{}.json'.format(args.dataset, args.optim.lower())
+	# if args.dp:
+		# json_path = '../json/client_server_{}_{}_dp.json'.format(args.dataset, args.optim.lower())
+	# ip_port = read_ip_port_json(json_path)
 
 	server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 	server_socket.bind((ip_port[0]['ip'], ip_port[0]['port'])) # default server rank id: 0

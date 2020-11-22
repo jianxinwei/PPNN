@@ -287,16 +287,16 @@ if __name__ == '__main__':
 		local_train_loader = prngDataloader(train_attributes, train_labels, local_train_idxes, batchsize=args.local_bs, gene=generator)
 
 	# Initialize socket connections
-	# ip_port = read_ip_port_json('../ip_port_client_server.json')
-	json_path = '../json/decentralized_{}_{}.json'.format(args.dataset, args.optim.lower())
-	if args.dp:
-		json_path = '../json/decentralized_{}_{}_dp.json'.format(args.dataset, args.optim.lower())
-	if args.tphe:
-		json_path = '../json/decentralized_{}_{}_tphe.json'.format(args.dataset, args.optim.lower())
-		if args.dp:
-			json_path = '../json/decentralized_{}_{}_dp_tphe.json'.format(args.dataset, args.optim.lower())
-	ip_port = read_ip_port_json(json_path)
-	# print(ip_port)
+	ip_port = read_ip_port_json('../ip_port.json')
+	# json_path = '../json/decentralized_{}_{}.json'.format(args.dataset, args.optim.lower())
+	# if args.dp:
+	# 	json_path = '../json/decentralized_{}_{}_dp.json'.format(args.dataset, args.optim.lower())
+	# if args.tphe:
+	# 	json_path = '../json/decentralized_{}_{}_tphe.json'.format(args.dataset, args.optim.lower())
+	# 	if args.dp:
+	# 		json_path = '../json/decentralized_{}_{}_dp_tphe.json'.format(args.dataset, args.optim.lower())
+	# ip_port = read_ip_port_json(json_path)
+	print(ip_port)
 
 	self_ip = ip_port[args.rank]['ip']
 	self_port = ip_port[args.rank]['port']

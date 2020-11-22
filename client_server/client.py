@@ -38,11 +38,11 @@ if __name__ == '__main__':
 	if args.rank == None:
 		sys.exit(1)
 
-	# ip_port = read_ip_port_json('../ip_port_client_server.json')
-	json_path = '../json/client_server_{}_{}.json'.format(args.dataset, args.optim.lower())
-	if args.dp:
-		json_path = '../json/client_server_{}_{}_dp.json'.format(args.dataset, args.optim.lower())
-	ip_port = read_ip_port_json(json_path)
+	ip_port = read_ip_port_json('../ip_port_client_server.json')
+	# json_path = '../json/client_server_{}_{}.json'.format(args.dataset, args.optim.lower())
+	# if args.dp:
+		# json_path = '../json/client_server_{}_{}_dp.json'.format(args.dataset, args.optim.lower())
+	# ip_port = read_ip_port_json(json_path)
 
 	server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
