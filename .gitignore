@@ -142,3 +142,5 @@ sftp-config.json
 
 *.pt
 *.pth
+
+*.idea/
